@@ -6,26 +6,73 @@
 ; Suppression des faits
 (clear)
 
-; Faits de base
+;;;======================================================
+;;; FAITS DE BASES
+;;;======================================================
 (deffacts fact
 	(as-weapon karl knife)
 	(as-weapon bob knife)
 	(as-weapon sam hammer)
 )
 
+;;;======================================================
+;;; FAITS ARMES DE CRIMES
+;;;======================================================
+
 (deffacts fact-crime
 	(weapon-crime knife)
 )
 
-; Faits Lieux-temps - nick
 
+;;;======================================================
+;;; Faits Lieux-temps - nick
+;;;======================================================
+
+
+
+;;;======================================================
 ; Faits arms-blessure - sim
+;;;======================================================
 
-; Faits emprunt - yannick
 
-; Faits lien avec victime
 
+;;;======================================================
+;; FAITS EMPRUNTS - yannick
+;;;======================================================
+
+(defrule cheveuxLongBlond
+	(declare (salience 39) )
+	(personnage ?nom a longCheveuxBlond)
+	=>
+	(printout t ?nom " is tired." crlf)
+)
+
+(defrule cheveuxLongBrun
+	(declare (salience 39) )
+	(personnage ?nom a longCheveuxBrun)
+	=>
+	(printout t ?nom " is tired." crlf)
+)
+
+;;;======================================================
+;;; CHARACTERS
+;;;======================================================
+
+
+
+
+
+;;;======================================================
+; Faits lien avec victime  -not now
+;;;======================================================
+
+
+
+
+;;;======================================================
 ; Règle de départ
+;;;======================================================
+
 (defrule startup
     =>
     (readline)
