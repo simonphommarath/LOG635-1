@@ -2,7 +2,7 @@
 ; Fichier d'exemple pour l'initiation au langage JESS.
 ; Démontre la base de l'utilisation des faits et des règles.
 ;
-
+ 
 ; Suppression des faits
 (clear)
 
