@@ -28,12 +28,20 @@
 
 /*
 (deffacts weapon-hint-on-crime-scene "hint on crime of scene"
-	(scene-has bullet-casing)
-	(scene-has bullet-shell)
+	(scene-has shell-casing)
 	(scene-has empty-vial)
-	(scene-has blood-splat)
+	(scene-has empty-seringue)
+	(scene-has blood-spat)
 )
 */
+
+; Victim body temperature
+; Victim blood coagulation
+; Victim struggle + not-victim-blood -> Killer = wounded
+; Fake evidence on crime scene
+; Finger prints
+
+; Victim job -> Victim Tools/weapon
 
 ;;;======================================================
 ;;; FACT OF SUSPECT
@@ -112,6 +120,38 @@
     (weapon poison-seringue poison)
 )
 
+; Doesn't make sense, I know
+(deffacts weapon-types "Poison type classified by container type"
+    (weapon-type detergent poison-vial)
+    (weapon-type insecticide poison-vial)
+    (weapon-type windwasher poison-vial)
+    (weapon-type gasoline poison-vial)
+    (weapon-type drugs poison-seringue)
+	(weapon-type snakebite poison-seringue)
+    (weapon-type SodiumThiopental poison-seringue)
+)
+
+(deffacts job "Weapon classified by jobs"
+    (job detergent garagist)
+    (job insecticide pestControl)
+    (job windwasher garagist)
+    (job gasoline garagist)
+    (job drugs doctor)
+	(job snakebite pestControl)
+    (job SodiumThiopental doctor)
+	(job hammer garagist)
+	(job sledgehammer garagist)
+	(job wrench garagist)
+	(job shovel garagist)
+	(job pistol policeOfficer)
+	(job shotgun policeOfficer)
+	(job knife policeOfficer)
+	(job blade policeOfficer)
+	(job machete pestControl)
+	(job screwdriver garagist)
+	(job nailgun garagist)
+)
+
 ;;;======================================================
 ;; FAITS ODEURS - yannick
 ;;;======================================================
@@ -170,6 +210,17 @@
 	(assert(can-be-weapon ?weapon))
 )
 
+/*
+(defrule job-has-weapon
+	(declare (salience 0) )
+	(can-be-weapon ?weapon)
+	(job ?weapon ?job)
+	=>
+	(printout t "The suspect can be " ?name" based on weapon possibility" crlf)
+	(assert(is-potential-killer-from-weapon ?name))
+)
+*/
+
 (defrule weapon-suspect
 	(declare (salience 0) )
 	(can-be-weapon ?weapon)
@@ -178,6 +229,8 @@
 	(printout t "The suspect can be " ?name" based on weapon possibility" crlf)
 	(assert(is-potential-killer-from-weapon ?name))
 )
+
+
 
 ;;;======================================================
 ;;; RULES EMPRUNTS
