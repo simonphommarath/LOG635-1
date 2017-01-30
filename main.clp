@@ -1,27 +1,20 @@
-;
-; Fichier d'exemple pour l'initiation au langage JESS.
-; Démontre la base de l'utilisation des faits et des règles.
-;
- 
-; Suppression des faits
+;;;======================================================
+;;; LOG-635 Laboratoire 1
+;;; Author:
+;;; 	Simon Phommarath
+;;; 	Nicolas Arsenault
+;;; 	Yannick Maringo
+;;; 
+;;;======================================================
+
 (clear)
 
 ;;;======================================================
-;;; FAITS DE BASES
-;;;======================================================
-(deffacts fact
-	(as-weapon karl knife)
-	(as-weapon bob knife)
-	(as-weapon sam hammer)
-	(as-weapon nicolas shovel)
-)
-
-;;;======================================================
-;;; FAITS ARMES DE CRIMES
+;;; FACT OF CRIME SCENE
 ;;;======================================================
 
-(deffacts fact-crime
-	(weapon-crime knife)
+(deffacts victim-wound "The wound types on the victim"
+	(vitim-wound laceration)
 )
 
 
@@ -56,16 +49,38 @@
 	(hair-color-on-crime blond)
 )
 
-;;;======================================================
-;; FAITS ODEURS - yannick
-;;;======================================================
 (deffacts fact
 	(lieu-smell-like fishes)
 )
 
+/*
+(deffacts weapon-hint-on-crime-scene "hint on crime of scene"
+	(scene-has shell-casing)
+	(scene-has empty-vial)
+	(scene-has empty-seringue)
+	(scene-has blood-spat)
+)
+*/
+
+; Victim body temperature
+; Victim blood coagulation
+; Victim struggle + not-victim-blood -> Killer = wounded
+; Fake evidence on crime scene
+; Finger prints
+
+; Victim job -> Victim Tools/weapon
+
 ;;;======================================================
-;;; CHARACTERS - yannick
+;;; FACT OF SUSPECT
 ;;;======================================================
+
+(deffacts fact
+	(has-weapon karl knife)
+	(has-weapon bob knife)
+	(has-weapon sam hammer)
+	(has-weapon nicolas shovel)
+)
+
 (deffacts fact
 	(likeToEat karl nutelas)
 	(hair-lenght-of karl long)
@@ -73,7 +88,7 @@
 
 	(likeToEat sam fishes)
 	(hair-lenght-of sam long)
-	(hair-color-of same dyed)
+	(hair-color-of sam dyed)
 
 	(likeToEat bob nutelas)
 	(likeToEat bob fishes)
@@ -83,15 +98,95 @@
 	(likeToEat roger fishes)
 )
 
+;;;======================================================
+;;; Faits Lieux-temps - nick
+;;;======================================================
 
 
+
+;;;======================================================
+;;; FACT OF WEAPON
+;;;======================================================
+
+(deffacts wound-types "the wound types"
+    (wound-type laceration)
+    (wound-type puncture)
+    (wound-type avulsion-fracture)
+    (wound-type mouth-erosion)
+    (wound-type blue-skin)
+    (wound-type red-eye)
+    (wound-type skin-rash)
+)
+
+(deffacts weapon-types "Weapon type classified by wound type"
+    (weapon-type slash laceration)
+    (weapon-type pierce puncture)
+    (weapon-type bullet puncture)
+    (weapon-type shell puncture)
+    (weapon-type blunt avulsion-fracture)
+	(weapon-type poison mouth-erosion)
+    (weapon-type poison blue-skin)
+    (weapon-type poison red-eye)
+    (weapon-type poison skin-rash)
+)
+
+(deffacts weapons "Weapon classified by weapon type"
+    (weapon hammer blunt)
+    (weapon sledgehammer blunt)
+    (weapon wrench blunt)
+    (weapon shovel blunt)
+	(weapon pistol bullet)
+    (weapon shotgun shell)
+    (weapon knife slash)
+	(weapon blade slash)
+	(weapon machete slash)
+    (weapon screwdriver pierce)
+    (weapon icepick pierce)
+    (weapon nailgun pierce)
+    (weapon poison-vial poison)
+    (weapon poison-seringue poison)
+)
+
+; Doesn't make sense, I know
+(deffacts weapon-types "Poison type classified by container type"
+    (weapon-type detergent poison-vial)
+    (weapon-type insecticide poison-vial)
+    (weapon-type windwasher poison-vial)
+    (weapon-type gasoline poison-vial)
+    (weapon-type drugs poison-seringue)
+	(weapon-type snakebite poison-seringue)
+    (weapon-type SodiumThiopental poison-seringue)
+)
+
+(deffacts job "Weapon classified by jobs"
+    (job detergent garagist)
+    (job insecticide pestControl)
+    (job windwasher garagist)
+    (job gasoline garagist)
+    (job drugs doctor)
+	(job snakebite pestControl)
+    (job SodiumThiopental doctor)
+	(job hammer garagist)
+	(job sledgehammer garagist)
+	(job wrench garagist)
+	(job shovel garagist)
+	(job pistol policeOfficer)
+	(job shotgun policeOfficer)
+	(job knife policeOfficer)
+	(job blade policeOfficer)
+	(job machete pestControl)
+	(job screwdriver garagist)
+	(job nailgun garagist)
+)
+
+;;;======================================================
+;; FAITS ODEURS - yannick
+;;;======================================================
 
 
 ;;;======================================================
 ;;; Faits lien avec victime  -not now
 ;;;======================================================
-
-
 
 
 ;;;======================================================
@@ -120,8 +215,55 @@
 )
 
 ;;;======================================================
-;;; Rule arms-blessur
+;;; RULES VICTIM-WOUND
 ;;;======================================================
+
+(defrule woundTypeDeduction
+	(declare (salience 0) )
+	(vitim-wound ?wound)
+	(wound-type ?wound)
+	=>
+	(printout t "Wound of victim is " ?wound " types" crlf)
+	(assert(wound-of-crime-type ?wound))
+)
+
+(defrule weaponTypeDeduction
+	(declare (salience 0) )
+	(wound-of-crime-type ?wound)
+	(weapon-type ?weaponType ?wound)
+	=>
+	(printout t "the weapon of crime can be of " ?weaponType " types" crlf)
+	(assert(weapon-of-crime-type ?weaponType))
+)
+
+(defrule weaponDeduction
+	(declare (salience 0) )
+	(weapon-of-crime-type ?weaponType)
+	(weapon ?weapon ?weaponType)
+	=>
+	(printout t "the weapon of crime can be " ?weapon " types" crlf)
+	(assert(can-be-weapon ?weapon))
+)
+
+/*
+(defrule job-has-weapon
+	(declare (salience 0) )
+	(can-be-weapon ?weapon)
+	(job ?weapon ?job)
+	=>
+	(printout t "The suspect can be " ?name" based on weapon possibility" crlf)
+	(assert(is-potential-killer-from-weapon ?name))
+)
+*/
+
+(defrule weapon-suspect
+	(declare (salience 0) )
+	(can-be-weapon ?weapon)
+	(has-weapon ?name ?weapon)
+	=>
+	(printout t "The suspect can be " ?name" based on weapon possibility" crlf)
+	(assert(is-potential-killer-from-weapon ?name))
+)
 
 
 
@@ -153,7 +295,6 @@
 	(printout t ?name " have colorMatching." crlf)
 )
 
-
 ;;;======================================================
 ;;; RULES ODORS
 ;;;======================================================
@@ -166,8 +307,6 @@
 	(printout t ?name " peut etre un victime." crlf)
 	(assert(is-potential-killer-from-odor ?name))
 )
-
-
 
 ;;;======================================================
 ;;; Rule lien avec victime
@@ -185,6 +324,8 @@
 	(weapon-crime ?weapon)
 	(was-there ?name)
 	(is-potential-killer-from-odor ?name)
+	(is-potential-killer-from-weapon ?name)
+	
 	(started)
 	=>
 	(assert (is-killer ?name))
