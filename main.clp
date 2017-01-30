@@ -17,33 +17,6 @@
 	(vitim-wound laceration)
 )
 
-
-;;;======================================================
-;;; Faits Lieux-temps - nick
-;;;======================================================
-
-(deffacts fact-place
-	(was-at karl cafe from-t 2 to-t 4)
-	(was-at bob cafe from-t 8 to-t 10)
-)
-
-(deffacts fact-crime-place
-	(crime-was-at park at-t 3)
-)
-
-(deffacts fact-distance
-	(distance-between park cafe is-t 0.5)
-)
-
-;;;======================================================
-; Faits arms-blessure - sim
-;;;======================================================
-
-
-
-;;;======================================================
-;; FAITS EMPRUNTS - yannick
-;;;======================================================
 (deffacts fact
 	(hair-lenght-on-crime long)
 	(hair-color-on-crime blond)
@@ -62,6 +35,10 @@
 )
 */
 
+(deffacts fact-crime-place
+	(crime-was-at park at-t 3)
+)
+
 ; Victim body temperature
 ; Victim blood coagulation
 ; Victim struggle + not-victim-blood -> Killer = wounded
@@ -78,6 +55,7 @@
 	(has-weapon karl knife)
 	(has-weapon bob knife)
 	(has-weapon sam hammer)
+	(has-weapon roger wrench)
 	(has-weapon nicolas shovel)
 )
 
@@ -102,7 +80,14 @@
 ;;; Faits Lieux-temps - nick
 ;;;======================================================
 
+(deffacts fact-place
+	(was-at karl cafe from-t 2 to-t 4)
+	(was-at bob cafe from-t 8 to-t 10)
+)
 
+(deffacts fact-distance
+	(distance-between park cafe is-t 0.5)
+)
 
 ;;;======================================================
 ;;; FACT OF WEAPON
@@ -204,13 +189,15 @@
 ;;; Rule Lieux-temps
 ;;;======================================================
 
+
 (defrule was-there
-	(declare (salience 0))
+	(declare (salience 20))
 	(crime-was-at ?location at-t ?tcrime)
 	(was-at ?name ?location from-t ?tstart to-t ?tend)
 	(test (>= ?tcrime ?tstart))
 	(test (<= ?tcrime ?tend))
 	=>
+	(printout t ?name " was on the crime scene on time of death" crlf)
 	(assert (was-there ?name))
 )
 
@@ -271,28 +258,15 @@
 ;;; RULES EMPRUNTS
 ;;;======================================================
 
-(defrule cheveuxLongBlond
-	(declare (salience 39) )
-	(personnage ?name a longCheveuxBlond)
-	=>
-	(printout t ?name " is tired." crlf)
-)
-
-(defrule cheveuxLongBrun
-	(declare (salience 39) )
-	(personnage ?name a longCheveuxBrun)
-	=>
-	(printout t ?name " is tired." crlf)
-)
-
-(defrule cheveuxLongBrun
-	(declare (salience 39) )
+(defrule hairColorMatch
+	(declare (salience 0) )
 	(hair-color-of ?name ?color)
 	(or (hair-color-on-crime ?color)
 	    (test (= ?color dyed))
 	)
 	=>
-	(printout t ?name " have colorMatching." crlf)
+	(printout t ?name " is a potential killer from matching hair color." crlf)
+	(assert(is-potential-killer-from-hair-color ?name))
 )
 
 ;;;======================================================
@@ -300,11 +274,11 @@
 ;;;======================================================
 
 (defrule odorDeduction
-	(declare (salience 39) )
+	(declare (salience 0) )
 	(likeToEat ?name ?meal)
 	(lieu-smell-like ?meal)
 	=>
-	(printout t ?name " peut etre un victime." crlf)
+	(printout t ?name " is a potential killer from odor" crlf)
 	(assert(is-potential-killer-from-odor ?name))
 )
 
@@ -319,17 +293,16 @@
 ;;;======================================================
 
 (defrule voici-le-tueur
-	(declare (salience 0))
-	(as-weapon ?name ?weapon)
-	(weapon-crime ?weapon)
-	(was-there ?name)
+	(declare (salience 50))
 	(is-potential-killer-from-odor ?name)
 	(is-potential-killer-from-weapon ?name)
-	
+	(is-potential-killer-from-hair-color ?name)
+	;(was-there ?name)
+
 	(started)
 	=>
 	(assert (is-killer ?name))
-	(printout t "Le tueur est " ?name crlf)
+	(printout t "The killer is " ?name crlf)
 	(halt)
 )
 
