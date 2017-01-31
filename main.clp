@@ -25,7 +25,7 @@
 
 
 (defrule was-there
-	(declare (salience 20))
+	(declare (salience 0))
 	(crime-was-at ?location at-t ?tcrime)
 	(was-at ?name ?location from-t ?tstart to-t ?tend)
 	(test (>= ?tcrime ?tstart))
@@ -34,6 +34,21 @@
 	(printout t ?name " was on the crime scene on time of death" crlf)
 	(assert (was-there ?name))
 )
+
+(defrule ajust-time
+	(declare (salience 20))
+	(crime-was-at ?locationCrime at-t ?tcrime)
+	(was-at ?name ?location from-t ?tstart to-t ?tend)
+	(distance-between ?locationCrime ?location ?distance)
+	(travel-by ?name ?car)
+	(tracel-at ?car ?speed gas ?litter)
+	=>
+	(assert (was-there ?name))
+	(assert (gas-used ?name ?car ?distance/?speed *?litter) 
+	(assert
+
+)
+
 
 ;;;======================================================
 ;;; RULES VICTIM-WOUND
@@ -131,7 +146,7 @@
 	(is-potential-killer-from-odor ?name)
 	(is-potential-killer-from-weapon ?name)
 	(is-potential-killer-from-hair-color ?name)
-	;(was-there ?name)
+	(was-there ?name)
 
 	(started)
 	=>

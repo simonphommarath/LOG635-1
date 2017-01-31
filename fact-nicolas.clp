@@ -86,7 +86,18 @@
 )
 
 (deffacts fact-distance
-	(distance-between park cafe is-t 0.5)
+	(distance-between park cafe is-t 100)
+)
+
+(deffacts fact-mobility
+	(travel-at car 100 gas 10)
+	(travel-at bike 50 gas 5)
+)
+
+(deffacts fact-travel-by
+	(travel-by bob car)
+	(travel-by bob bike)
+	(travel-by karl car)
 )
 
 ;;;======================================================
