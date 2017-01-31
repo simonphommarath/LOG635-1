@@ -127,6 +127,44 @@
 ;;	(assert(is-potential-killer-from-facture-on-crime ?name))
 ;;)
 	
+	
+;;;======================================================
+;;; RULES PUNITENCE
+;;;======================================================
+
+(defrule isTreatAsAnAdultInTheCountry
+	(declare (salience 0) )
+	(has-age-of ?name ?ageOfSuspect)
+	(country-of-crime ?country)
+	(age-of-adult-of ?country ?ageOfAdultOfCountry)
+	
+	(test (> ?ageOfSuspect ?ageOfAdultOfCountry))	
+	=>
+	(printout t ?name " will be treat as an adult in the country of : " ?country crlf)
+	(assert(will-be-treat-as-an-adult ?name ?country))
+)
+
+(defrule isTreatAsAMinorInTheCountry
+	(declare (salience 0) )
+	(has-age-of ?name ?ageOfSuspect)
+	(country-of-crime ?country)
+	(age-of-adult-of ?country ?ageOfAdultOfCountry)
+	
+	(test (< ?ageOfSuspect ?ageOfAdultOfCountry))
+	=>
+	(printout t ?name " will be treat as a minor in the country of : " ?country crlf)
+	(assert(will-be-treat-as-a-minor ?name ?country))
+)
+
+(defrule PenitenceInTheCountryForTheKiller
+	(declare (salience 0) )
+	(will-be-treat-as-an-adult ?name ?country)
+	(punitence-of-country ?country ?penalty)
+	=>
+	(printout t ?name " could get a sentence of : " ?penalty crlf)
+	(assert(penitenceOfSuspect ?name ?penalty ?country))
+)
+
 
 ;;;======================================================
 ;;; RULES ODORS
@@ -172,12 +210,13 @@
 	(is-potential-killer-from-hair-color ?name)
 	(is-potential-killer-from-hair-lenght ?name)
 	(is-potential-killer-from-fingerprints-odor-found-on-crime ?name)
+	(penitenceOfSuspect ?name ?penalty ?country)
 	;(was-there ?name)
 
 	(started)
 	=>
 	(assert (is-killer ?name))
-	(printout t "The killer is " ?name crlf)
+	(printout t "The killer is " ?name " and will get the sentence of : " ?penalty " in the country of : " ?country crlf)
 	(halt)
 )
 

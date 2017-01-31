@@ -66,12 +66,23 @@
 ;;;======================================================
 
 (deffacts fact
+	;;Country Canada
+	(country-of-crime canada)
+	(punitence-of-country canada deathPenalty)
+	(age-of-adult-of canada 18)
+	
+	;;Country Mexico
+	(punitence-of-country mexico none)
+	(age-of-adult-of mexico 15)
+
+
 	;;Karl
 	(likeToEat karl nutelas)
 	(hair-lenght-of karl long)
 	(hair-color-of karl blond)
 	(has-weapon karl knife)
 	(has-fingerprint karl triangle)
+	(has-age-of karl 12)
 
 
 	;;Sam
@@ -80,7 +91,7 @@
 	(hair-color-of sam dyed)
 	(has-weapon sam hammer)
 	(has-fingerprint sam circle)
-
+	(has-age-of sam 15)
 
 
 	;;Bob killer
@@ -90,17 +101,20 @@
 	(hair-color-of bob blond)
 	(has-weapon bob knife)
 	(has-fingerprint bob triangle)
+	(has-age-of bob 21)
 
 
-	
 	;;Roger
 	(likeToEat roger fishes)
 	(has-weapon roger wrench)
 	(has-fingerprint roger triangle)
+	(has-age-of roger 30)
 
 	
 	;;Nicolas
 	(has-weapon nicolas shovel)
+	(has-age-of nicolas 22)
+
 
 )
 
