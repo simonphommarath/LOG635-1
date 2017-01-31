@@ -25,7 +25,7 @@
 
 
 (defrule was-there
-	(declare (salience 20))
+	(declare (salience 0))
 	(crime-was-at ?location at-t ?tcrime)
 	(was-at ?name ?location from-t ?tstart to-t ?tend)
 	(test (>= ?tcrime ?tstart))
@@ -34,6 +34,35 @@
 	(printout t ?name " was on the crime scene on time of death" crlf)
 	(assert (was-there ?name))
 )
+
+(defrule adjusted-time
+	(declare (salience 20))
+	(crime-was-at ?locationCrime at-t ?tcrime)
+	(was-at ?name ?location from-t ?tstart to-t ?tend)
+	(distance-between ?locationCrime ?location is-t ?distance)
+	(travel-by ?name ?car)
+	(travel-at ?car ?speed gas ?litter)
+	=>
+	;(printout t ?name " was on the crime scene on time of death" crlf)
+	(bind ?ttravel (/ ?distance ?speed)) 
+	(assert (was-at-adjusted ?name ?location from-t (+ ?tstart ?ttravel) to-t (+ ?tend ?ttravel)))
+	(printout t ?name " use this much gas: " (* ?ttravel ?litter) crlf)
+	(assert (gas-used ?name ?car (* ?ttravel ?litter)))
+)
+
+(defrule was-there-adjusted
+	(declare (salience 30))
+	(crime-was-at ?locationCrime at-t ?tcrime)
+	(was-at-adjusted ?name ?location from-t ?tstart to-t ?tend)
+	(or	(test (<= ?tcrime ?tstart))
+		(test (>= ?tcrime ?tend)))
+	=>
+	(printout t ?name " could be on the crime scene on time of death" crlf)
+	(assert (was-there ?name))
+)
+
+
+
 
 ;;;======================================================
 ;;; RULES VICTIM-WOUND
@@ -66,16 +95,16 @@
 	(assert(can-be-weapon ?weapon))
 )
 
-/*
-(defrule job-has-weapon
-	(declare (salience 0) )
-	(can-be-weapon ?weapon)
-	(job ?weapon ?job)
-	=>
-	(printout t "The suspect can be " ?name" based on weapon possibility" crlf)
-	(assert(is-potential-killer-from-weapon ?name))
-)
-*/
+;;/*
+;;(defrule job-has-weapon
+;;	(declare (salience 0) )
+;;	(can-be-weapon ?weapon)
+;;	(job ?weapon ?job)
+;;	=>
+;;	(printout t "The suspect can be " ?name" based on weapon possibility" crlf)
+;;	(assert(is-potential-killer-from-weapon ?name))
+;;)
+;;*/
 
 (defrule weapon-suspect
 	(declare (salience 0) )
@@ -91,7 +120,6 @@
 ;;;======================================================
 ;;; RULES EMPRUNTS
 ;;;======================================================
-
 (defrule hairColorMatch
 	(declare (salience 0) )
 	(hair-color-of ?name ?color)
@@ -169,7 +197,6 @@
 ;;;======================================================
 ;;; RULES ODORS
 ;;;======================================================
-
 (defrule odorDeduction
 	(declare (salience 0) )
 	(likeToEat ?name ?meal)
@@ -208,8 +235,10 @@
 	(is-potential-killer-from-odor ?name)
 	(is-potential-killer-from-weapon ?name)
 	(is-potential-killer-from-hair-color ?name)
+	;;(was-there ?name) CA CHIE LE CODE MAN ! TO FIX
 	(is-potential-killer-from-hair-lenght ?name)
 	(is-potential-killer-from-fingerprints-odor-found-on-crime ?name)
+
 	(penitenceOfSuspect ?name ?penalty ?country)
 	;(was-there ?name)
 

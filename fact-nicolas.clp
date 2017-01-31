@@ -36,7 +36,7 @@
 */
 
 (deffacts fact-crime-place
-	(crime-was-at park at-t 3)
+	(crime-was-at park at-t 15)
 )
 
 ; Victim body temperature
@@ -81,12 +81,26 @@
 ;;;======================================================
 
 (deffacts fact-place
-	(was-at karl cafe from-t 2 to-t 4)
-	(was-at bob cafe from-t 8 to-t 10)
+	(was-at karl park from-t 14 to-t 16)
+	(was-at bob park from-t 8 to-t 10)
+	(was-at bob cafe from-t 10 to-t 12)
+	(was-at john cafe from-t 10 to-t 14)
 )
 
 (deffacts fact-distance
-	(distance-between park cafe is-t 0.5)
+	(distance-between park cafe is-t 100)
+)
+
+(deffacts fact-mobility
+	(travel-at carr 100 gas 10)
+	(travel-at bike 50 gas 5)
+)
+
+(deffacts fact-travel-by
+	(travel-by bob carr)
+	(travel-by bob bike)
+	(travel-by karl carr)
+	(travel-by john bike)
 )
 
 ;;;======================================================
