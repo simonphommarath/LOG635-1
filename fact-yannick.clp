@@ -24,6 +24,8 @@
 
 (deffacts fact
 	(lieu-smell-like fishes)
+	(lieu-found-item nutelas)
+	(lieu-found-item-fingerprints triangle)
 )
 
 ;;
@@ -69,6 +71,7 @@
 	(hair-lenght-of karl long)
 	(hair-color-of karl blond)
 	(has-weapon karl knife)
+	(has-fingerprint karl triangle)
 
 
 	;;Sam
@@ -76,6 +79,8 @@
 	(hair-lenght-of sam long)
 	(hair-color-of sam dyed)
 	(has-weapon sam hammer)
+	(has-fingerprint sam circle)
+
 
 
 	;;Bob killer
@@ -84,11 +89,15 @@
 	(hair-lenght-of bob short)
 	(hair-color-of bob blond)
 	(has-weapon bob knife)
+	(has-fingerprint bob triangle)
+
 
 	
 	;;Roger
 	(likeToEat roger fishes)
 	(has-weapon roger wrench)
+	(has-fingerprint roger triangle)
+
 	
 	;;Nicolas
 	(has-weapon nicolas shovel)
