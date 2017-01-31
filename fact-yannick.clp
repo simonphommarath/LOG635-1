@@ -14,7 +14,7 @@
 ;;;======================================================
 
 (deffacts victim-wound "The wound types on the victim"
-	(vitim-wound laceration)
+	(victim-wound laceration)
 )
 
 (deffacts fact
@@ -24,6 +24,18 @@
 
 (deffacts fact
 	(lieu-smell-like fishes)
+)
+
+;;
+;;;;;;MODULE FACTURE
+;;
+(deffacts fact
+	(facture-on-crime 50)
+	(amountDiscovered-for 0)	;; For each person, initialize to 0 NEED TO ADD NAME INCOMPLETE GO SIMON !!!
+	
+	(price-of-blond-dye 20)
+	(price-of-brown-dye 51)
+	(price-of-black-dye 25) ;;unused
 )
 
 /*
@@ -52,28 +64,35 @@
 ;;;======================================================
 
 (deffacts fact
-	(has-weapon karl knife)
-	(has-weapon bob knife)
-	(has-weapon sam hammer)
-	(has-weapon roger wrench)
-	(has-weapon nicolas shovel)
-)
-
-(deffacts fact
+	;;Karl
 	(likeToEat karl nutelas)
 	(hair-lenght-of karl long)
 	(hair-color-of karl blond)
+	(has-weapon karl knife)
 
+
+	;;Sam
 	(likeToEat sam fishes)
 	(hair-lenght-of sam long)
 	(hair-color-of sam dyed)
+	(has-weapon sam hammer)
 
+
+	;;Bob killer
 	(likeToEat bob nutelas)
 	(likeToEat bob fishes)
 	(hair-lenght-of bob short)
 	(hair-color-of bob blond)
+	(has-weapon bob knife)
+
 	
+	;;Roger
 	(likeToEat roger fishes)
+	(has-weapon roger wrench)
+	
+	;;Nicolas
+	(has-weapon nicolas shovel)
+
 )
 
 ;;;======================================================
@@ -163,9 +182,5 @@
 	(job screwdriver garagist)
 	(job nailgun garagist)
 )
-
-;;;======================================================
-;; FAITS ODEURS - yannick
-;;;======================================================
 
 (batch "main.clp")

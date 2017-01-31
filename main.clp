@@ -35,19 +35,33 @@
 	(assert (was-there ?name))
 )
 
-(defrule ajust-time
+(defrule adjusted-time
 	(declare (salience 20))
 	(crime-was-at ?locationCrime at-t ?tcrime)
 	(was-at ?name ?location from-t ?tstart to-t ?tend)
-	(distance-between ?locationCrime ?location ?distance)
+	(distance-between ?locationCrime ?location is-t ?distance)
 	(travel-by ?name ?car)
-	(tracel-at ?car ?speed gas ?litter)
+	(travel-at ?car ?speed gas ?litter)
 	=>
-	(assert (was-there ?name))
-	(assert (gas-used ?name ?car ?distance/?speed *?litter) 
-	(assert
-
+	;(printout t ?name " was on the crime scene on time of death" crlf)
+	(bind ?ttravel (/ ?distance ?speed)) 
+	(assert (was-at-adjusted ?name ?location from-t (+ ?tstart ?ttravel) to-t (+ ?tend ?ttravel)))
+	(printout t ?name " use this much gas: " (* ?ttravel ?litter) crlf)
+	(assert (gas-used ?name ?car (* ?ttravel ?litter)))
 )
+
+(defrule was-there-adjusted
+	(declare (salience 30))
+	(crime-was-at ?locationCrime at-t ?tcrime)
+	(was-at-adjusted ?name ?location from-t ?tstart to-t ?tend)
+	(or	(test (<= ?tcrime ?tstart))
+		(test (>= ?tcrime ?tend)))
+	=>
+	(printout t ?name " could be on the crime scene on time of death" crlf)
+	(assert (was-there ?name))
+)
+
+
 
 
 ;;;======================================================
@@ -56,7 +70,7 @@
 
 (defrule woundTypeDeduction
 	(declare (salience 0) )
-	(vitim-wound ?wound)
+	(victim-wound ?wound)
 	(wound-type ?wound)
 	=>
 	(printout t "Wound of victim is " ?wound " types" crlf)
@@ -106,7 +120,7 @@
 ;;;======================================================
 ;;; RULES EMPRUNTS
 ;;;======================================================
-
+/*
 (defrule hairColorMatch
 	(declare (salience 0) )
 	(hair-color-of ?name ?color)
@@ -118,10 +132,34 @@
 	(assert(is-potential-killer-from-hair-color ?name))
 )
 
+(defrule hairLenghtMatch
+	(declare (salience 0) )
+	(wound-of-crime-type ?wound-type)
+	(hair-lenght-on-crime ?lenght)
+	(or	(hair-lenght-of ?name ?lenght)
+		(and (hair-lenght-of ?name short)
+		(test (= ?wound-type laceration))
+		)
+	)
+	=>
+	(printout t ?name " is a potential killer from hair lenght matching." crlf)
+	(assert(is-potential-killer-from-hair-lenght ?name))
+)
+*/
+;;(defrule factureMatching
+;;	(declare (salience 0) )
+;;	(facture-on-crime ?amount)
+;;	(test (< ?amountDiscovered-for ?name ?amount))
+;;	=>
+;;	(printout t ?name " is a potential killer for having legit facture." crlf)
+;;	(assert(is-potential-killer-from-facture-on-crime ?name))
+;;)
+	
+
 ;;;======================================================
 ;;; RULES ODORS
 ;;;======================================================
-
+/*
 (defrule odorDeduction
 	(declare (salience 0) )
 	(likeToEat ?name ?meal)
@@ -130,12 +168,7 @@
 	(printout t ?name " is a potential killer from odor" crlf)
 	(assert(is-potential-killer-from-odor ?name))
 )
-
-;;;======================================================
-;;; Rule lien avec victime
-;;;======================================================
-
-
+*/
 
 ;;;======================================================
 ;;; Règles de déduction
@@ -147,7 +180,7 @@
 	(is-potential-killer-from-weapon ?name)
 	(is-potential-killer-from-hair-color ?name)
 	(was-there ?name)
-
+	(is-potential-killer-from-hair-lenght ?name)
 	(started)
 	=>
 	(assert (is-killer ?name))
