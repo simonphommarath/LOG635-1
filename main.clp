@@ -41,7 +41,7 @@
 
 (defrule woundTypeDeduction
 	(declare (salience 0) )
-	(vitim-wound ?wound)
+	(victim-wound ?wound)
 	(wound-type ?wound)
 	=>
 	(printout t "Wound of victim is " ?wound " types" crlf)
@@ -103,6 +103,30 @@
 	(assert(is-potential-killer-from-hair-color ?name))
 )
 
+(defrule hairLenghtMatch
+	(declare (salience 0) )
+	(wound-of-crime-type ?wound-type)
+	(hair-lenght-on-crime ?lenght)
+	(or	(hair-lenght-of ?name ?lenght)
+		(and (hair-lenght-of ?name short)
+		(test (= ?wound-type laceration))
+		)
+	)
+	=>
+	(printout t ?name " is a potential killer from hair lenght matching." crlf)
+	(assert(is-potential-killer-from-hair-lenght ?name))
+)
+
+;;(defrule factureMatching
+;;	(declare (salience 0) )
+;;	(facture-on-crime ?amount)
+;;	(test (< ?amountDiscovered-for ?name ?amount))
+;;	=>
+;;	(printout t ?name " is a potential killer for having legit facture." crlf)
+;;	(assert(is-potential-killer-from-facture-on-crime ?name))
+;;)
+	
+
 ;;;======================================================
 ;;; RULES ODORS
 ;;;======================================================
@@ -116,11 +140,6 @@
 	(assert(is-potential-killer-from-odor ?name))
 )
 
-;;;======================================================
-;;; Rule lien avec victime
-;;;======================================================
-
-
 
 ;;;======================================================
 ;;; Règles de déduction
@@ -131,6 +150,7 @@
 	(is-potential-killer-from-odor ?name)
 	(is-potential-killer-from-weapon ?name)
 	(is-potential-killer-from-hair-color ?name)
+	(is-potential-killer-from-hair-lenght ?name)
 	;(was-there ?name)
 
 	(started)
