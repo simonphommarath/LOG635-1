@@ -120,7 +120,6 @@
 ;;;======================================================
 ;;; RULES EMPRUNTS
 ;;;======================================================
-/*
 (defrule hairColorMatch
 	(declare (salience 0) )
 	(hair-color-of ?name ?color)
@@ -145,12 +144,8 @@
 	(printout t ?name " is a potential killer from hair lenght matching." crlf)
 	(assert(is-potential-killer-from-hair-lenght ?name))
 )
-<<<<<<< HEAD
-*/
-=======
 
 
->>>>>>> 1e232d24e8a9b7bc4e8aaa0ca1034f049d5b191e
 ;;(defrule factureMatching
 ;;	(declare (salience 0) )
 ;;	(facture-on-crime ?amount)
@@ -164,7 +159,6 @@
 ;;;======================================================
 ;;; RULES ODORS
 ;;;======================================================
-/*
 (defrule odorDeduction
 	(declare (salience 0) )
 	(likeToEat ?name ?meal)
@@ -173,9 +167,6 @@
 	(printout t ?name " is a potential killer from odor" crlf)
 	(assert(is-potential-killer-from-odor ?name))
 )
-<<<<<<< HEAD
-*/
-=======
 
 (defrule finterprints-found-on-object-matches-suspect-fingerprints
 	(declare (salience 0) )
@@ -196,7 +187,6 @@
 	(assert(is-potential-killer-from-fingerprints-odor-found-on-crime ?name))
 )
 
->>>>>>> 1e232d24e8a9b7bc4e8aaa0ca1034f049d5b191e
 
 ;;;======================================================
 ;;; Règles de déduction
@@ -209,12 +199,7 @@
 	(is-potential-killer-from-hair-color ?name)
 	(was-there ?name)
 	(is-potential-killer-from-hair-lenght ?name)
-<<<<<<< HEAD
-=======
 	(is-potential-killer-from-fingerprints-odor-found-on-crime ?name)
-	;(was-there ?name)
-
->>>>>>> 1e232d24e8a9b7bc4e8aaa0ca1034f049d5b191e
 	(started)
 	=>
 	(assert (is-killer ?name))
