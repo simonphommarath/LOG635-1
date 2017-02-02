@@ -14,16 +14,22 @@
 ;;;======================================================
 
 (deffacts victim-wound "The wound types on the victim"
-	(vitim-wound laceration)
+	(victim-wound laceration)
 )
 
-(deffacts fact
+(deffacts fact-hair-lenght
 	(hair-lenght-on-crime long)
 	(hair-color-on-crime blond)
 )
 
-(deffacts fact
+(deffacts fact-smell
 	(lieu-smell-like fishes)
+	(lieu-found-item nutelas)
+	(lieu-found-item-fingerprints triangle)
+)
+
+(deffacts fact-receipt
+	(receipt-on-crime 50)
 )
 
 /*
@@ -52,28 +58,74 @@
 ;;;======================================================
 
 (deffacts fact
-	(has-weapon karl knife)
-	(has-weapon bob knife)
-	(has-weapon sam hammer)
-	(has-weapon roger wrench)
-	(has-weapon nicolas shovel)
-)
+	;;Country Canada
+	(country-of-crime canada)
+	(punitence-of-country canada deathPenalty)
+	(age-of-adult-of canada 18)
+	
+	;;Country Mexico
+	(punitence-of-country mexico none)
+	(age-of-adult-of mexico 15)
 
-(deffacts fact
-	(likeToEat karl nutelas)
+
+	;;Karl
+	(like-to-eat karl nutelas)
 	(hair-lenght-of karl long)
-	(hair-color-of karl blond)
+	(hair-color-of karl brown)
+	(hair-color-is-dyed karl FALSE)
+	(has-weapon karl knife)
+	(has-fingerprint karl triangle)
+	(has-age-of karl 12)
 
-	(likeToEat sam fishes)
+	;;Sam
+	(like-to-eat sam fishes)
 	(hair-lenght-of sam long)
-	(hair-color-of sam dyed)
+	(hair-color-of sam blond)
+	(hair-color-is-dyed sam TRUE)
+	(has-weapon sam hammer)
+	(has-fingerprint sam circle)
+	(has-age-of sam 15)
 
-	(likeToEat bob nutelas)
-	(likeToEat bob fishes)
+	;;Bob killer
+	(like-to-eat bob nutelas)
+	(like-to-eat bob fishes)
 	(hair-lenght-of bob short)
 	(hair-color-of bob blond)
+	(hair-color-is-dyed bob FALSE)
+	(has-weapon bob knife)
+	(has-fingerprint bob triangle)
+	(has-age-of bob 21)
+
+	;;Bob2 killer
+	(like-to-eat bob2 nutelas)
+	(like-to-eat bob2 fishes)
+	(hair-lenght-of bob2 short)
+	(hair-color-of bob2 blond)
+	(hair-color-is-dyed bob2 FALSE)
+	(has-weapon bob2 knife)
+	(has-fingerprint bob2 triangle)
+	(has-age-of bob2 21)
+
+	;;Roger
+	(like-to-eat roger fishes)
+	(has-weapon roger wrench)
+	(has-fingerprint roger triangle)
+	(has-age-of roger 30)
 	
-	(likeToEat roger fishes)
+	;;Nicolas
+	(has-weapon nicolas shovel)
+	(has-age-of nicolas 22)
+
+)
+
+(deffacts fact-dye-price
+	(dye-price-is blond 10)
+	(dye-price-is brown 15)
+	(dye-price-is black 20)
+)
+
+(deffacts fact-gaz-price-by-liter
+	(one-liter-gaz-price-is 13)
 )
 
 ;;;======================================================
@@ -83,10 +135,23 @@
 (deffacts fact-place
 	(was-at karl cafe from-t 2 to-t 4)
 	(was-at bob cafe from-t 8 to-t 10)
+	(was-at bob2 cafe from-t 8 to-t 10)
 )
 
 (deffacts fact-distance
 	(distance-between park cafe is-t 0.5)
+)
+
+(deffacts fact-mobility
+	(travel-at carr 100 gas 10)
+	(travel-at bike 50 gas 5)
+)
+
+(deffacts fact-travel-by
+	(travel-by bob carr)
+	(travel-by bob bike)
+	(travel-by karl carr)
+	(travel-by john bike)
 )
 
 ;;;======================================================
@@ -163,9 +228,5 @@
 	(job screwdriver garagist)
 	(job nailgun garagist)
 )
-
-;;;======================================================
-;; FAITS ODEURS - yannick
-;;;======================================================
 
 (batch "main.clp")

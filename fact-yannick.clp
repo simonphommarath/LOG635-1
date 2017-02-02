@@ -77,7 +77,7 @@
 
 
 	;;Karl
-	(likeToEat karl nutelas)
+	(like-to-eat karl nutelas)
 	(hair-lenght-of karl long)
 	(hair-color-of karl blond)
 	(has-weapon karl knife)
@@ -86,7 +86,7 @@
 
 
 	;;Sam
-	(likeToEat sam fishes)
+	(like-to-eat sam fishes)
 	(hair-lenght-of sam long)
 	(hair-color-of sam dyed)
 	(has-weapon sam hammer)
@@ -95,8 +95,8 @@
 
 
 	;;Bob killer
-	(likeToEat bob nutelas)
-	(likeToEat bob fishes)
+	(like-to-eat bob nutelas)
+	(like-to-eat bob fishes)
 	(hair-lenght-of bob short)
 	(hair-color-of bob blond)
 	(has-weapon bob knife)
@@ -105,7 +105,7 @@
 
 
 	;;Roger
-	(likeToEat roger fishes)
+	(like-to-eat roger fishes)
 	(has-weapon roger wrench)
 	(has-fingerprint roger triangle)
 	(has-age-of roger 30)

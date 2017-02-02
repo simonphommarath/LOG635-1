@@ -60,20 +60,20 @@
 )
 
 (deffacts fact
-	(likeToEat karl nutelas)
+	(like-to-eat karl nutelas)
 	(hair-lenght-of karl long)
 	(hair-color-of karl blond)
 
-	(likeToEat sam fishes)
+	(like-to-eat sam fishes)
 	(hair-lenght-of sam long)
 	(hair-color-of sam dyed)
 
-	(likeToEat bob nutelas)
-	(likeToEat bob fishes)
+	(like-to-eat bob nutelas)
+	(like-to-eat bob fishes)
 	(hair-lenght-of bob short)
 	(hair-color-of bob blond)
 	
-	(likeToEat roger fishes)
+	(like-to-eat roger fishes)
 )
 
 ;;;======================================================
