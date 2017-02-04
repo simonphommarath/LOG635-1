@@ -15,9 +15,6 @@
 ; verification de 1 ou plus de criminel a la fin, 
 ;	si plus que 2, sa foire
 
-; crime-was-at est trouver par (la coagulation du sang) avec (l'heure de l'investigation)
-;	il ne doit pas etre un fact setter du depart
-
 ; trouver l'age de la personne par le cheveux de la scene de crime
 ;	il ne doit pas etre un fact setter du depart
 
@@ -29,7 +26,7 @@
 ;	Sa fait que on trouve des fait par elimination (qui vaut des points)
 ;	Par contre, sa reduit tu les inferences en faisant sa?
 
-; -Current situation, 20 rules, 49 inference, ? complexe
+; -Current situation, 22 rules, 51 inference, 5? complexe
 
 ;;;======================================================
 ;;; Règle de départ
@@ -45,6 +42,28 @@
 ;;;======================================================
 ;;; Rule Lieux-temps
 ;;;======================================================
+
+(defrule time-past-since-crime
+	(declare (salience 0))
+	(body-temperature-is ?body-temperature)
+	(dead-body-temperature-is-at ?body-temperature degree-when-dead ?past-time hours-ago)
+	=>
+	(assert (time-past-since-crime ?past-time))
+	(printout t "The crime was committed " ?past-time " hours ago" crlf)
+)
+
+(defrule corpse-time-location
+	(declare (salience 0))
+	(time-past-since-crime ?past-time)
+	(current-time-is ?current-time)
+	(crime-location ?location)
+	=>
+	(printout t "The current time is " ?current-time " hours " crlf)
+	(bind ?death-time (- ?current-time ?past-time))
+	(assert (crime-was-at ?location at-t ?death-time))
+	(printout t "The crime was at the " ?location " at " ?death-time " hours" crlf)
+)
+
 (defrule was-there
 	(declare (salience 0))
 	(crime-was-at ?location at-t ?tcrime)

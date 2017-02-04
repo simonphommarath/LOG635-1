@@ -41,8 +41,23 @@
 )
 */
 
-(deffacts fact-crime-place
-	(crime-was-at park at-t 3)
+(deffacts crime-location
+	(crime-location park)
+)
+
+(deffacts current-investigation-time
+	(current-time-is 7)
+)
+
+(deffacts body-temperature-on-crime-scene
+	(body-temperature-is 10)
+)
+
+(deffacts body-temperature-on-crime-scene
+	(dead-body-temperature-is-at 10 degree-when-dead 4 hours-ago)
+	(dead-body-temperature-is-at 20 degree-when-dead 3 hours-ago)
+	(dead-body-temperature-is-at 30 degree-when-dead 2 hours-ago)
+	(dead-body-temperature-is-at 40 degree-when-dead 1 hours-ago)
 )
 
 ; Victim body temperature
