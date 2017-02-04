@@ -92,8 +92,12 @@
 )
 
 (deffacts fact-mobility
-	(travel-at carr 100 gas 10)
-	(travel-at bike 50 gas 5)
+	(travel-at carr 100 gas 13)
+	(travel-at bike 70 gas 4.5)
+)
+
+(deffacts fact-gaz
+	(gas-price 2)
 )
 
 (deffacts fact-travel-by
@@ -101,6 +105,16 @@
 	(travel-by bob bike)
 	(travel-by karl carr)
 	(travel-by john bike)
+)
+
+(deffacts suspect
+	(suspect bob)
+	(suspect karl)
+	(suspect john)
+)
+
+(deffacts fact-receipt
+	(receipt-on-crime 100)
 )
 
 ;;;======================================================
@@ -177,9 +191,5 @@
 	(job screwdriver garagist)
 	(job nailgun garagist)
 )
-
-;;;======================================================
-;; FAITS ODEURS - yannick
-;;;======================================================
 
 (batch "main.clp")

@@ -45,7 +45,6 @@
 ;;;======================================================
 ;;; Rule Lieux-temps
 ;;;======================================================
-
 (defrule was-there
 	(declare (salience 0))
 	(crime-was-at ?location at-t ?tcrime)
@@ -82,10 +81,11 @@
 	(printout t ?name " could be on the crime scene on time of death" crlf)
 	(assert (was-there ?name))
 )
-
 ;;;======================================================
 ;;; RULES VICTIM-WOUND
 ;;;======================================================
+
+
 
 (defrule woundTypeDeduction
 	(declare (salience 0) )
@@ -114,7 +114,7 @@
 	(assert(can-be-weapon ?weapon))
 )
 
-/*
+
 ; To be removed maybe
 (defrule job-has-weapon
 	(declare (salience 0) )
@@ -124,7 +124,6 @@
 	(printout t "The suspect can be " ?name" based on weapon possibility" crlf)
 	(assert(is-potential-killer-from-weapon ?name))
 )
-*/
 
 /*
 ; To be removed maybe
@@ -141,7 +140,7 @@
 ;;;======================================================
 ;;; RULES EMPRUNTS
 ;;;======================================================
-
+/*
 (defrule hairColorMatch
 	(declare (salience 0) )
 	(hair-color-of ?name ?color)
@@ -167,48 +166,12 @@
 	(printout t ?name " is a potential killer from hair lenght matching." crlf)
 	(assert(is-potential-killer-from-hair-lenght ?name))
 )
-
+*/
 	
-;;;======================================================
-;;; RULES PUNITENCE
-;;;======================================================
-
-(defrule isTreatAsAnAdultInTheCountry
-	(declare (salience 0) )
-	(has-age-of ?name ?ageOfSuspect)
-	(country-of-crime ?country)
-	(age-of-adult-of ?country ?ageOfAdultOfCountry)
-	
-	(test (> ?ageOfSuspect ?ageOfAdultOfCountry))	
-	=>
-	(printout t ?name " will be treat as an adult in the country of : " ?country crlf)
-	(assert(will-be-treat-as-an-adult ?name ?country))
-)
-
-(defrule isTreatAsAMinorInTheCountry
-	(declare (salience 0) )
-	(has-age-of ?name ?ageOfSuspect)
-	(country-of-crime ?country)
-	(age-of-adult-of ?country ?ageOfAdultOfCountry)
-	
-	(test (< ?ageOfSuspect ?ageOfAdultOfCountry))
-	=>
-	(printout t ?name " will be treat as a minor in the country of : " ?country crlf)
-	(assert(will-be-treat-as-a-minor ?name ?country))
-)
-
-(defrule PenitenceInTheCountryForTheKiller
-	(declare (salience 0) )
-	(will-be-treat-as-an-adult ?name ?country)
-	(punitence-of-country ?country ?penalty)
-	=>
-	(printout t ?name " could get a sentence of : " ?penalty crlf)
-	(assert(penitenceOfSuspect ?name ?penalty ?country))
-)
-
 ;;;======================================================
 ;;; RULES ODORS
 ;;;======================================================
+/*
 (defrule odorDeduction
 	(declare (salience 0) )
 	(like-to-eat ?name ?meal)
@@ -236,13 +199,13 @@
 	(printout t ?name " likes to eat the item found on the scene and the odor matches the object found." crlf)
 	(assert(is-potential-killer-from-fingerprints-odor-found-on-crime ?name))
 )
-
+*/
 ;;;======================================================
 ;;; RULES RECEIPT
 ;;;======================================================
 
 (defrule moneySpentOnHairDye
-	(declare (salience 0) )
+	(declare (salience 0))
 	(hair-color-is-dyed ?name ?is-dyed)
 	(hair-color-of ?name ?hair-color)
 	(dye-price-is ?hair-color ?dye-price)
@@ -253,7 +216,7 @@
 )
 
 (defrule moneyNotSpentOnHairDye
-	(declare (salience 0) )
+	(declare (salience 0))
 	(hair-color-is-dyed ?name ?is-dyed)
 	(test (eq ?is-dyed FALSE))
 	=>
@@ -261,31 +224,46 @@
 	(assert(has-spent-on-dye ?name 0))
 )
 
-(defrule moneySpentOnGaz
-	(declare (salience 0) )
-	(gas-used ?name ?car ?gaz-liter-consumed)
-	(one-liter-gaz-price-is ?gaz-price)
-	(test (> ?gaz-liter-consumed 0))
+(defrule money-spent-on-gaz
+	(declare (salience 0))
+	(gas-used ?name ?car ?gaz)
+	(gas-price ?price)
+	;(test (> ?gaz-liter-consumed 0))
 	=>
-	(bind ?has-spent-on-gaz (* ?gaz-liter-consumed ?gaz-price)) 
-	(printout t ?name " has consumed " ?gaz-liter-consumed "L, so he spent " ?has-spent-on-gaz "$" crlf)
-	(assert(has-spent-on-gaz ?name ?has-spent-on-gaz))
+	(bind ?money (* ?gaz ?price))
+	(printout t ?name " needed " ?money "$ of gaz" crlf)
+	(assert(has-spent-on-gaz ?name ?money))
 )
 
+	
+
 (defrule moneyNotSpentOnGaz
-	(declare (salience 0) )
-	(gas-used ?name ?car ?gaz-liter-consumed)
-	(test (= ?gaz-liter-consumed 0))
+	(declare (salience 0))
+	(suspect ?name)
+	(not (gas-used ?name ?car ?gaz))
 	=>
 	(printout t ?name " did not spend money on gaz " crlf)
 	(assert(has-spent-on-gaz ?name 0))
+)
+
+
+
+(defrule receipt-matching
+	(declare (salience 0))
+	(suspect ?name)
+	(receipt-on-crime ?amount)
+	(has-spent-on-gaz ?name ?gas)
+	(test (>= ?amount ?gas))
+	=>
+	(printout t ?name " is a potential killer because of the receipt." crlf)
+	(assert(is-potential-killer-from-receipt-on-crime ?name))
 )
 
 /*
 ; Nic, tu connais la logique, plz do it
 ; Le frame est toute faite, faut juste le (test 
 (defrule receiptMatching
-	(declare (salience 0) )
+	(declare (salience 0))
 	(receipt-on-crime ?amount)
 	(has-spent-on-dye ?name ?dye-price)
 	(has-spent-on-gaz ?name ?gaz-cost)
@@ -302,21 +280,21 @@
 
 (defrule the-killer-is
 	(declare (salience 50))
-	(is-potential-killer-from-odor ?name)
+	;(is-potential-killer-from-odor ?name)
 	;(is-potential-killer-from-weapon ?name)
-	(is-potential-killer-from-hair-color ?name)
-	(is-potential-killer-from-hair-lenght ?name)
-	(is-potential-killer-from-fingerprints-odor-found-on-crime ?name)
-	;(is-potential-killer-from-receipt-on-crime ?name)
-	;(was-there ?name) CA CHIE LE CODE MAN ! TO FIX
-
-	(penitenceOfSuspect ?name ?penalty ?country)
+	;(is-potential-killer-from-hair-color ?name)
+	;(is-potential-killer-from-hair-lenght ?name)
+	;(is-potential-killer-from-fingerprints-odor-found-on-crime ?name)
+	(is-potential-killer-from-receipt-on-crime ?name)
+	(was-there ?name)
+	
+	;(penitenceOfSuspect ?name ?penalty ?country)
 
 	(started)
 	=>
 	(assert (is-killer ?name))
 	(printout t "The killer is " ?name " because he fits matches with all the evidence" crlf)
-	(printout t "The killer " ?name " will get the sentence of : " ?penalty " in the country of : " ?country crlf)
+	;(printout t "The killer " ?name " will get the sentence of : " ?penalty " in the country of : " ?country crlf)
 	;(halt) J'ai mis sa en commentaire pour voir le VRAI resultat finale (plus que 1 criminel possible actuellement) - Simon
 )
 
