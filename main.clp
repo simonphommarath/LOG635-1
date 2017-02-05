@@ -424,11 +424,11 @@
 
 (defrule the-killer-is
 	(declare (salience 50))
-	;;(is-potential-killer-from-odor ?name)									;;bob rentre
+	(is-potential-killer-from-odor ?name)									;;bob rentre
 	;;(is-potential-killer-from-weapon ?name)
-	;;(is-potential-killer-from-hair-color ?name)								;;bob rentre
-	;;(is-potential-killer-from-hair-lenght ?name)							;;bob rentre
-	;;(is-potential-killer-from-fingerprints-odor-found-on-crime ?name)		;;bob rentre
+	(is-potential-killer-from-hair-color ?name)								;;bob rentre
+	(is-potential-killer-from-hair-lenght ?name)							;;bob rentre
+	(is-potential-killer-from-fingerprints-odor-found-on-crime ?name)		;;bob rentre
 	;;(is-potential-killer-from-receipt-on-crime ?name)
 	;;(was-there ?name)
 	(is-fucking-bob ?name)													;;Ultimate Test bob condition !
