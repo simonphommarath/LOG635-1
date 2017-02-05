@@ -248,7 +248,7 @@
 		(printout t "The suspect " ?name " hair youth is unknown" crlf)
 	)))
 	
-	(assert(is-potential-killer-from-hair-youth-groupAge ?name)
+	(assert(is-potential-killer-from-hair-youth-groupAge ?name))
 
 )
 
@@ -367,7 +367,6 @@
 	(is-potential-killer-from-receipt-on-crime ?name)
 	(was-there ?name)
 	
-	;(is-potential-killer-from-hair-youth-groupAge ?name)
 	;(penitenceOfSuspect ?name ?penalty ?country)
 
 	(started)
