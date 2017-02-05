@@ -23,9 +23,10 @@
 	(corpse-skin-detoriation-is-at-phase 3)
 )
 
-(deffacts fact-hair-lenght
+(deffacts fact-hair
 	(hair-lenght-on-crime long)
 	(hair-color-on-crime blond)
+	(hair-youth-groupAge-on-crime 20 to 30)
 )
 
 (deffacts fact-smell
