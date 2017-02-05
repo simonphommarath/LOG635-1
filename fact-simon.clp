@@ -32,15 +32,6 @@
 	(receipt-on-crime 50)
 )
 
-/*
-(deffacts weapon-hint-on-crime-scene "hint on crime of scene"
-	(scene-has shell-casing)
-	(scene-has empty-vial)
-	(scene-has empty-seringue)
-	(scene-has blood-spat)
-)
-*/
-
 (deffacts crime-location
 	(crime-location park)
 )
@@ -53,24 +44,24 @@
 	(body-temperature-is 10)
 )
 
-(deffacts body-temperature-on-crime-scene
-	(dead-body-temperature-is-at 10 degree-when-dead 4 hours-ago)
-	(dead-body-temperature-is-at 20 degree-when-dead 3 hours-ago)
-	(dead-body-temperature-is-at 30 degree-when-dead 2 hours-ago)
-	(dead-body-temperature-is-at 40 degree-when-dead 1 hours-ago)
-)
-
 ; Victim body temperature
 ; Victim blood coagulation
 ; Victim struggle + not-victim-blood -> Killer = wounded
 ; Fake evidence on crime scene
 ; Finger prints
-
 ; Victim job -> Victim Tools/weapon
 
 ;;;======================================================
 ;;; FACT OF SUSPECT
 ;;;======================================================
+
+(deffacts suspect
+	(suspect bob)
+	(suspect karl)
+	(suspect sam)
+	(suspect bob2)
+	(suspect roger)
+)
 
 (deffacts fact
 	;;Country Canada
@@ -87,7 +78,6 @@
 	(like-to-eat karl nutelas)
 	(hair-lenght-of karl long)
 	(hair-color-of karl brown)
-	(hair-color-is-dyed karl FALSE)
 	(has-weapon karl knife)
 	(has-fingerprint karl triangle)
 	(has-age-of karl 12)
@@ -96,7 +86,7 @@
 	(like-to-eat sam fishes)
 	(hair-lenght-of sam long)
 	(hair-color-of sam blond)
-	(hair-color-is-dyed sam TRUE)
+	(hair-color-is-dyed sam)
 	(has-weapon sam hammer)
 	(has-fingerprint sam circle)
 	(has-age-of sam 15)
@@ -106,7 +96,6 @@
 	(like-to-eat bob fishes)
 	(hair-lenght-of bob short)
 	(hair-color-of bob blond)
-	(hair-color-is-dyed bob FALSE)
 	(has-weapon bob knife)
 	(has-fingerprint bob triangle)
 	(has-age-of bob 21)
@@ -116,7 +105,6 @@
 	(like-to-eat bob2 fishes)
 	(hair-lenght-of bob2 short)
 	(hair-color-of bob2 blond)
-	(hair-color-is-dyed bob2 FALSE)
 	(has-weapon bob2 knife)
 	(has-fingerprint bob2 triangle)
 	(has-age-of bob2 21)
@@ -139,8 +127,8 @@
 	(dye-price-is black 20)
 )
 
-(deffacts fact-gaz-price-by-liter
-	(one-liter-gaz-price-is 13)
+(deffacts fact-gas-price-by-liter
+	(one-liter-gas-price-is 13)
 )
 
 ;;;======================================================
@@ -148,18 +136,23 @@
 ;;;======================================================
 
 (deffacts fact-place
-	(was-at karl cafe from-t 2 to-t 4)
-	(was-at bob cafe from-t 8 to-t 10)
-	(was-at bob2 cafe from-t 8 to-t 10)
+	(was-at karl park from-t 14 to-t 16)
+	(was-at bob park from-t 8 to-t 10)
+	(was-at bob cafe from-t 10 to-t 12)
+	(was-at john cafe from-t 10 to-t 14)
 )
 
 (deffacts fact-distance
-	(distance-between park cafe is-t 0.5)
+	(distance-between park cafe is-t 100)
 )
 
 (deffacts fact-mobility
-	(travel-at carr 100 gas 10)
-	(travel-at bike 50 gas 5)
+	(travel-at carr 100 gas 13)
+	(travel-at bike 70 gas 4.5)
+)
+
+(deffacts fact-gas
+	(gas-price 2)
 )
 
 (deffacts fact-travel-by
@@ -167,6 +160,10 @@
 	(travel-by bob bike)
 	(travel-by karl carr)
 	(travel-by john bike)
+)
+
+(deffacts fact-receipt
+	(receipt-on-crime 100)
 )
 
 ;;;======================================================

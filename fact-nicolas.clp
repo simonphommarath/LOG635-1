@@ -96,7 +96,7 @@
 	(travel-at bike 70 gas 4.5)
 )
 
-(deffacts fact-gaz
+(deffacts fact-gas
 	(gas-price 2)
 )
 

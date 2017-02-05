@@ -29,19 +29,28 @@
 ; -Current situation, 22 rules, 51 inference, 5? complexe
 
 ;;;======================================================
-;;; Règle de départ
-;;;======================================================
-
-(defrule startup
-    =>
-    (readline)
-    (printout t "Start" crlf)
-    (assert (started))
-)
-
-;;;======================================================
 ;;; Rule Lieux-temps
 ;;;======================================================
+
+(deffacts body-temperature-on-crime-scene
+	(body-temperature-is-at-phase 1 0 to 1)
+	(body-temperature-is-at-phase 2 2 to 4)
+	(body-temperature-is-at-phase 3 5 to 7)
+	(body-temperature-is-at-phase 4 7 to 10)
+)
+
+(deffacts coagulation-on-crime-scene
+	(coagulation-is-at phase-1 0 to 2)
+	(coagulation-is-at phase-2 3 to 5)
+	(coagulation-is-at phase-3 6 to 8)
+	(coagulation-is-at phase-4 9 to 11)
+)
+
+(deffacts skin-detoriation-on-crime-scene
+	(skin-detoriation-is-at-phase 1 0 to 3)
+	(skin-detoriation-is-at-phase 2 4 to 6)
+	(skin-detoriation-is-at-phase 3 7 to 9)
+)
 
 (defrule time-past-since-crime
 	(declare (salience 0))
@@ -104,8 +113,6 @@
 ;;; RULES VICTIM-WOUND
 ;;;======================================================
 
-
-
 (defrule woundTypeDeduction
 	(declare (salience 0) )
 	(victim-wound ?wound)
@@ -133,7 +140,7 @@
 	(assert(can-be-weapon ?weapon))
 )
 
-
+/*
 ; To be removed maybe
 (defrule job-has-weapon
 	(declare (salience 0) )
@@ -143,29 +150,17 @@
 	(printout t "The suspect can be " ?name" based on weapon possibility" crlf)
 	(assert(is-potential-killer-from-weapon ?name))
 )
-
-/*
-; To be removed maybe
-(defrule weaponSuspect
-	(declare (salience 0) )
-	(can-be-weapon ?weapon)
-	(has-weapon ?name ?weapon)
-	=>
-	(printout t "The suspect can be " ?name" based on weapon possibility" crlf)
-	(assert(is-potential-killer-from-weapon ?name))
-)
 */
 
 ;;;======================================================
 ;;; RULES EMPRUNTS
 ;;;======================================================
-/*
+
 (defrule hairColorMatch
 	(declare (salience 0) )
 	(hair-color-of ?name ?color)
-	(hair-color-is-dyed ?name ?is-dyed)
 	(or (hair-color-on-crime ?color)
-	    (test (= ?is-dyed TRUE))
+	    (hair-color-is-dyed ?name)
 	)
 	=>
 	(printout t ?name " is a potential killer from matching hair color." crlf)
@@ -185,7 +180,6 @@
 	(printout t ?name " is a potential killer from hair lenght matching." crlf)
 	(assert(is-potential-killer-from-hair-lenght ?name))
 )
-*/
 	
 ;;;======================================================
 ;;; RULES ODORS
@@ -236,62 +230,43 @@
 
 (defrule moneyNotSpentOnHairDye
 	(declare (salience 0))
-	(hair-color-is-dyed ?name ?is-dyed)
-	(test (eq ?is-dyed FALSE))
+	(suspect ?name)
+	(not (hair-color-is-dyed ?name))
 	=>
 	(printout t ?name " did not pay for dye" crlf)
 	(assert(has-spent-on-dye ?name 0))
 )
 
-(defrule money-spent-on-gaz
+(defrule moneySpentOngas
 	(declare (salience 0))
-	(gas-used ?name ?car ?gaz)
+	(gas-used ?name ?car ?gas)
 	(gas-price ?price)
-	;(test (> ?gaz-liter-consumed 0))
 	=>
-	(bind ?money (* ?gaz ?price))
-	(printout t ?name " needed " ?money "$ of gaz" crlf)
-	(assert(has-spent-on-gaz ?name ?money))
+	(bind ?money (* ?gas ?price))
+	(printout t ?name " needed " ?money "$ of gas" crlf)
+	(assert(has-spent-on-gas ?name ?money))
 )
 
-	
-
-(defrule moneyNotSpentOnGaz
+(defrule moneyNotSpentOnGas
 	(declare (salience 0))
 	(suspect ?name)
-	(not (gas-used ?name ?car ?gaz))
+	(not (gas-used ?name ?car ?gas))
 	=>
-	(printout t ?name " did not spend money on gaz " crlf)
-	(assert(has-spent-on-gaz ?name 0))
+	(printout t ?name " did not spend money on gas " crlf)
+	(assert(has-spent-on-gas ?name 0))
 )
-
-
 
 (defrule receipt-matching
-	(declare (salience 0))
+	(declare (salience 45))
 	(suspect ?name)
 	(receipt-on-crime ?amount)
-	(has-spent-on-gaz ?name ?gas)
-	(test (>= ?amount ?gas))
+	(has-spent-on-dye ?name ?dye)
+	(has-spent-on-gas ?name ?gas)
+	(test (>= ?amount (+ ?gas ?dye)))
 	=>
 	(printout t ?name " is a potential killer because of the receipt." crlf)
 	(assert(is-potential-killer-from-receipt-on-crime ?name))
 )
-
-/*
-; Nic, tu connais la logique, plz do it
-; Le frame est toute faite, faut juste le (test 
-(defrule receiptMatching
-	(declare (salience 0))
-	(receipt-on-crime ?amount)
-	(has-spent-on-dye ?name ?dye-price)
-	(has-spent-on-gaz ?name ?gaz-cost)
-	(test (> ?amount ?dye-price ))
-	=>
-	(printout t ?name " is a potential killer because of the receipt." crlf)
-	(assert(is-potential-killer-from-receipt-on-crime ?name))
-)
-*/
 
 ;;;======================================================
 ;;; Deduction rules
@@ -317,6 +292,6 @@
 	;(halt) J'ai mis sa en commentaire pour voir le VRAI resultat finale (plus que 1 criminel possible actuellement) - Simon
 )
 
-;(rules)
+(rules)
 (reset)
 (run)
