@@ -284,22 +284,10 @@
 	(has-age-of ?name ?age)
 	(test (>= ?age ?minAge))
 	(test (<= ?age ?maxAge))
-	=>	
+	=>
+	(printout t ?name " has the right age" crlf)
 	(assert(is-potential-killer-from-hair-youth ?name ?age))
 )
-
-(defrule hairMatchingAgeSuspect
-	(declare (salience 0) )
-	
-	(theTest ?name)
-	(suspect ?name)
-	
-	=>
-	(printout t "The Ultimate Test for " ?name " worked if bob" crlf)
-	(assert(is-fucking-bob ?name ))
-)
-
-
 
 
 	
@@ -406,6 +394,17 @@
 ;;;======================================================
 ;;; Deduction rules
 ;;;======================================================
+
+(defrule test-cas
+	(declare (salience 0) )
+	
+	(theTest ?name)
+	(suspect ?name)
+	
+	=>
+	(printout t "The Ultimate Test for " ?name " worked if bob" crlf)
+	(assert(is-fucking-bob ?name ))
+)
 
 (defrule the-killer-is
 	(declare (salience 50))
