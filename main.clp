@@ -31,67 +31,78 @@
 ;;;======================================================
 ;;; Rule Lieux-temps
 ;;;======================================================
-/*
-(deffacts body-temperature-on-crime-scene
-	(body-temperature-is-at-phase 1 1 to 1)
-	(body-temperature-is-at-phase 2 2 to 4)
-	(body-temperature-is-at-phase 3 5 to 7)
-	(body-temperature-is-at-phase 4 8 to 10)
-)*/
-
-(deffacts coagulation-on-crime-scene
-	(coagulation-is-at-phase 1 1 to 2)
-	(coagulation-is-at-phase 2 3 to 5)
-	(coagulation-is-at-phase 3 6 to 8)
-	(coagulation-is-at-phase 4 9 to 11)
-)
-
-(deffacts skin-detoriation-on-crime-scene
-	(skin-detoriation-is-at-phase 1 1 to 3)
-	(skin-detoriation-is-at-phase 2 4 to 6)
-	(skin-detoriation-is-at-phase 3 7 to 9)
-)
 
 (defrule corpse-body-temperature
 	(declare (salience 0))
-	(corpse-body-temperature-is-at-phase ?temp)
+	(corpse-body-temperature-is-at-phase ?phase)
 	=>
-
-	(if (eq ?temp 1) then
+	(if (eq ?phase 1) then
 		(bind ?tmin 1)
 		(bind ?tmax 1)
-
-	else (if (eq ?temp 2) then
+	else (if (eq ?phase 2) then
 		(bind ?tmin 2)
 		(bind ?tmax 4)
-
-	else (if (eq ?temp 3) then
+	else (if (eq ?phase 3) then
 		(bind ?tmin 5)
 		(bind ?tmax 7)
 	else
 		(bind ?tmin 8)
 		(bind ?tmax 10)
 	)))
-	
-	(assert (body-temperature-is-at-phase ?temp ?tmin to ?tmax))
-	(printout t "body-temperature-is-at-phase " ?temp " " ?tmin " to " ?tmax crlf)
+	(assert (body-temperature-is-at-phase ?phase ?tmin to ?tmax))
+	(printout t "The body temperature is at phase " ?phase crlf)
+	(printout t "From the body temperature, we know he died between " ?tmin " and " ?tmax crlf)
+)
+
+(defrule corpse-body-coagulation
+	(declare (salience 0))
+	(corpse-coagulation-is-at-phase ?phase)
+	=>
+	(if (eq ?phase 1) then
+		(bind ?tmin 1)
+		(bind ?tmax 2)
+	else (if (eq ?phase 2) then
+		(bind ?tmin 3)
+		(bind ?tmax 5)
+	else (if (eq ?phase 3) then
+		(bind ?tmin 6)
+		(bind ?tmax 8)
+	else
+		(bind ?tmin 9)
+		(bind ?tmax 11)
+	)))
+	(assert (coagulation-is-at-phase ?phase ?tmin to ?tmax))
+	(printout t "The body coagulation is at phase " ?phase crlf)
+	(printout t "From the body coagulation, we know he died between " ?tmin " and " ?tmax crlf)
+)
+
+(defrule corpse-body-skin-detoriation
+	(declare (salience 0))
+	(corpse-skin-detoriation-is-at-phase ?phase)
+	=>
+	(if (eq ?phase 1) then
+		(bind ?tmin 1)
+		(bind ?tmax 3)
+	else (if (eq ?phase 2) then
+		(bind ?tmin 4)
+		(bind ?tmax 6)
+	else
+		(bind ?tmin 7)
+		(bind ?tmax 9)
+	))
+	(assert (skin-detoriation-is-at-phase ?phase ?tmin to ?tmax))
+	(printout t "The body skin detoriation is at phase " ?phase crlf)
+	(printout t "From the skin detoriation, we know he died between " ?tmin " and " ?tmax crlf)
 )
 
 (defrule time-of-crime
 	(declare (salience 0))
-	(corpse-body-temperature-is-at-phase ?temp)
-	(corpse-coagulation-is-at-phase ?coag)
-	(corpse-skin-detoriation-is-at-phase ?skin)
-	
-	(skin-detoriation-is-at-phase ?skin ?min-skin to ?max-skin)
-	(coagulation-is-at-phase ?coag ?min-coag to ?max-coag)
-	(body-temperature-is-at-phase ?temp ?min-temp to ?max-temp)
+	(skin-detoriation-is-at-phase ?skin-phase ?min-skin to ?max-skin)
+	(coagulation-is-at-phase ?coag-phase ?min-coag to ?max-coag)
+	(body-temperature-is-at-phase ?temp-phase ?min-temp to ?max-temp)
 	=>
-	(printout t "XXXXXXXXXXXXXXXXX" crlf)
 	(bind ?tmin (min ?max-skin (min ?max-coag ?max-temp)))
-	(bind ?tmax (max ?min-skin (max ?min-coag ?min-temp)))
 	(assert (time-past-since-crime ?tmin))
-	(printout t "time min: " ?tmin " max: " ?tmax crlf)
 	(printout t "The crime was committed " ?tmin " hours ago" crlf)
 )
 
@@ -143,6 +154,7 @@
 	(printout t ?name " could be on the crime scene on time of death" crlf)
 	(assert (was-there ?name))
 )
+
 ;;;======================================================
 ;;; RULES VICTIM-WOUND
 ;;;======================================================
@@ -218,7 +230,7 @@
 ;;;======================================================
 ;;; RULES ODORS
 ;;;======================================================
-/*
+
 (defrule odorDeduction
 	(declare (salience 0) )
 	(like-to-eat ?name ?meal)
@@ -246,7 +258,7 @@
 	(printout t ?name " likes to eat the item found on the scene and the odor matches the object found." crlf)
 	(assert(is-potential-killer-from-fingerprints-odor-found-on-crime ?name))
 )
-*/
+
 ;;;======================================================
 ;;; RULES RECEIPT
 ;;;======================================================
@@ -275,20 +287,20 @@
 ;; Gas
 (defrule money-spent-on-gas
 	(declare (salience 0))
-	(gas-used ?name ?car ?gas)
+	(gas-used ?name ?vehicule ?gas)
 	(gas-price ?price)
 	=>
 	(bind ?money (* ?gas ?price))
-	(printout t ?name " needed " ?money "$ of gas" crlf)
+	(printout t ?name " needed " ?money "$ of gas with his " ?vehicule crlf)
 	(assert(has-spent-on-gas ?name ?money))
 )
 
 (defrule money-not-spent-on-gas
 	(declare (salience 0))
 	(suspect ?name)
-	(not (gas-used ?name ?car ?gas))
+	(not (gas-used ?name ?vehicule ?gas))
 	=>
-	(printout t ?name " did not spend money on gas " crlf)
+	(printout t ?name " did not spend money on gas" crlf)
 	(assert(has-spent-on-gas ?name 0))
 )
 
@@ -310,7 +322,7 @@
 	(has-spent-on-gas ?name ?gas)
 	(test (>= ?amount (+ ?gas ?dye)))
 	=>
-	(printout t ?name " is a potential killer because of the receipt." crlf)
+	(printout t ?name " is a potential killer because of the receipt" crlf)
 	(assert(is-potential-killer-from-receipt-on-crime ?name))
 )
 

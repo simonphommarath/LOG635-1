@@ -43,7 +43,7 @@
 )
 
 (deffacts current-investigation-time
-	(current-time-is 7)
+	(current-time-is 11)
 )
 
 (deffacts body-temperature-on-crime-scene
