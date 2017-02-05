@@ -9,48 +9,35 @@
 
 
 ;;;======================================================
-;;; TO DO
+;;; Temperature
 ;;;======================================================
-
-; verification de 1 ou plus de criminel a la fin, 
-;	si plus que 2, sa foire
-
-; trouver l'age de la personne par le cheveux de la scene de crime
-;	il ne doit pas etre un fact setter du depart
-
-; -Current situation, 22 rules, 51 inference, 5? complexe
-
-; cheveux -> range age -> suspect
-; odor -> food type -> food
-
-;;;======================================================
-;;; Rule Lieux-temps
-;;;======================================================
-
-(defrule real-corpse-body-temperature
+;; On ajust selon le type d'arme
+(defrule real-victim-temperature
 	(declare (salience 9))
-	(corpse-body-temperature-is-at-phase ?phase)
-	(weapon-of-crime-type ?weaponType)
-	(temperature-phase-modification ?weaponType ?phaseModif)
+	(victim-temperature-is-at-phase ?phase)
+	(victim-wound ?wound)
+	(temperature-phase-modification ?wound ?phaseModif)
 	=>
 	(bind ?newPhase (+ ?phase ?phaseModif))
-	(assert (actual-corpse-temperature-is-at-phase ?newPhase))
+	(assert (actual-victim-temperature-is-at-phase ?newPhase))
 	(printout t "The actual body temperature is at phase " ?newPhase crlf)
 )
 
-(defrule corpse-body-actual-temperature
-	(declare (salience 9))
-	(corpse-body-temperature-is-at-phase ?phase)
-	(weapon-of-crime-type ?weaponType)
-	(not (temperature-phase-modification ?weaponType ?phaseModif))
+;; Si on a pas de modification lier au type d'arme
+(defrule victim-actual-temperature
+  (declare (salience -1))
+	(victim-temperature-is-at-phase ?phase)
+	(victim-wound ?wound)
+	(not (temperature-phase-modification ?wound ?phaseModif))
 	=>
-	(assert (actual-corpse-temperature-is-at-phase ?phase))
+	(assert (actual-victim-temperature-is-at-phase ?phase))
 	(printout t "The body temperature did not change because of the weapon" crlf)
 )
 
-(defrule corpse-body-temperature
+;; On calcule le temps de la mort
+(defrule victim-temperature
 	(declare (salience 8))
-	(actual-corpse-temperature-is-at-phase ?phase)
+	(actual-victim-temperature-is-at-phase ?phase)
 	=>
 	(if (<= ?phase 1) then
 		(bind ?tmin 1)
@@ -70,30 +57,36 @@
 	(printout t "From the body temperature, we know he died between " ?tmin " and " ?tmax crlf)
 )
 
-(defrule corpse-body-coagulation
+;;;======================================================
+;;; Coagulation
+;;;======================================================
+; On ajust la phase selon le type d'arme
+(defrule victim-coagulation
 	(declare (salience 9))
-	(corpse-coagulation-is-at-phase ?phase)
-	(weapon-of-crime-type ?weaponType)
-	(coagulation-phase-modification ?weaponType ?phaseModif)
+	(victim-coagulation-is-at-phase ?phase)
+	(victim-wound ?wound)
+	(coagulation-phase-modification ?wound ?phaseModif)
 	=>
 	(bind ?newPhase (+ ?phase ?phaseModif))
-	(assert (actual-corpse-coagulation-is-at-phase ?newPhase))
+	(assert (actual-victim-coagulation-is-at-phase ?newPhase))
 	(printout t "The actual body coagulation is at phase " ?newPhase crlf)
 )
 
-(defrule corpse-body-actual-coagulation
-	(declare (salience 9))
-	(corpse-coagulation-is-at-phase ?phase)
-	(weapon-of-crime-type ?weaponType)
-	(not (coagulation-affected-by-weapon-type ?weaponType ?phaseModif))
+; Si on a pas de modification lie
+(defrule victim-actual-coagulation
+  (declare (salience -1))
+	(victim-coagulation-is-at-phase ?phase)
+	(victim-wound ?wound)
+	(not (coagulation-affected-by-weapon-type ?wound ?phaseModif))
 	=>
-	(assert (actual-corpse-coagulation-is-at-phase ?phase))
+	(assert (actual-victim-coagulation-is-at-phase ?phase))
 	(printout t "The body coagulation did not change from the weapon" crlf)
 )
 
-(defrule corpse-body-coagulation
+; On calcule l'age
+(defrule victim-coagulation
 	(declare (salience 9))
-	(actual-corpse-coagulation-is-at-phase ?phase)
+	(actual-victim-coagulation-is-at-phase ?phase)
 	=>
 	(if (<= ?phase 1) then
 		(bind ?tmin 1)
@@ -113,30 +106,33 @@
 	(printout t "From the body coagulation, we know he died between " ?tmin " and " ?tmax crlf)
 )
 
-(defrule corpse-body-skin-detoriation
+;;;======================================================
+;;; Temperature
+;;;======================================================
+(defrule victim-skin-detoriation
 	(declare (salience 9))
-	(corpse-skin-detoriation-is-at-phase ?phase)
-	(weapon-of-crime-type ?weaponType)
-	(skin-detoriation-phase-modification ?weaponType ?phaseModif)
+	(victim-skin-detoriation-is-at-phase ?phase)
+	(victim-wound ?wound)
+	(skin-detoriation-phase-modification ?wound ?phaseModif)
 	=>
 	(bind ?newPhase (+ ?phase ?phaseModif))
-	(assert (actual-corpse-skin-detoriation-is-at-phase ?newPhase))
+	(assert (actual-victim-skin-detoriation-is-at-phase ?newPhase))
 	(printout t "The actual body skin-detoriation is at phase " ?newPhase crlf)
 )
 
-(defrule corpse-body-actual-skin-detoriation
-	(declare (salience 9))
-	(corpse-skin-detoriation-is-at-phase ?phase)
-	(weapon-of-crime-type ?weaponType)
-	(not (skin-detoriation-affected-by-weapon-type ?weaponType ?phaseModif))
+(defrule victim-actual-skin-detoriation
+  (declare (salience -1))
+	(victim-skin-detoriation-is-at-phase ?phase)
+	(victim-wound ?wound)
+	(not (skin-detoriation-affected-by-weapon-type ?wound ?phaseModif))
 	=>
-	(assert (actual-corpse-skin-detoriation-is-at-phase ?phase))
+	(assert (actual-victim-skin-detoriation-is-at-phase ?phase))
 	(printout t "The body skin detoriation did not change from the weapon" crlf)
 )
 
-(defrule corpse-body-skin-detoriation
+(defrule victim-skin-detoriation
 	(declare (salience 10))
-	(actual-corpse-skin-detoriation-is-at-phase ?phase)
+	(actual-victim-skin-detoriation-is-at-phase ?phase)
 	=>
 	(if (<= ?phase 1) then
 		(bind ?tmin 1)
@@ -153,6 +149,10 @@
 	(printout t "From the skin detoriation, we know he died between " ?tmin " and " ?tmax crlf)
 )
 
+
+;;;======================================================
+;;; Time of the crime
+;;;======================================================
 (defrule time-of-crime
 	(declare (salience 11))
 	(skin-detoriation-is-at-phase ?skin-phase ?min-skin to ?max-skin)
@@ -164,7 +164,7 @@
 	(printout t "The crime was committed " ?tmin " hours ago" crlf)
 )
 
-(defrule corpse-time-location
+(defrule victim-time-location
 	(declare (salience 15))
 	(time-past-since-crime ?past-time)
 	(current-time-is ?current-time)
@@ -176,6 +176,10 @@
 	(printout t "The crime was at the " ?location " at " ?death-time " hours" crlf)
 )
 
+;;;======================================================
+;;; Time and location of suspect
+;;;======================================================
+
 ;Complexe
 (defrule was-there
 	(declare (salience 13))
@@ -186,6 +190,8 @@
 	=>
 	(printout t ?name " was on the crime scene on time of death" crlf)
 	(assert (was-there ?name))
+	(assert (gas-used ?name none 0))
+	(assert (gas-calculated ?name))
 )
 
 ;Complexe
@@ -194,14 +200,14 @@
 	(crime-was-at ?locationCrime at-t ?tcrime)
 	(was-at ?name ?location from-t ?tstart to-t ?tend)
 	(distance-between ?locationCrime ?location is-t ?distance)
-	(travel-by ?name ?car)
-	(travel-at ?car ?speed gas ?litter)
+	(travel ?name  by ?car)
+	(travel-by ?car ?speed gas ?litter)
 	=>
-	;(printout t ?name " was on the crime scene on time of death" crlf)
 	(bind ?ttravel (/ ?distance ?speed)) 
 	(assert (was-at-adjusted ?name ?location from-t (+ ?tstart ?ttravel) to-t (+ ?tend ?ttravel)))
 	(printout t ?name " use this much gas: " (* ?ttravel ?litter) crlf)
 	(assert (gas-used ?name ?car (* ?ttravel ?litter)))
+	(assert (gas-calculated ?name))
 )
 
 ;Complexe
@@ -220,7 +226,7 @@
 ;;; RULES VICTIM-WOUND
 ;;;======================================================
 
-(defrule woundTypeDeduction
+(defrule wound-type-deduction
 	(declare (salience 18) )
 	(victim-wound ?wound)
 	(wound-type ?wound)
@@ -229,7 +235,7 @@
 	(assert(wound-of-crime-type ?wound))
 )
 
-(defrule weaponTypeDeduction
+(defrule weapon-type-deduction
 	(declare (salience 0) )
 	(wound-of-crime-type ?wound)
 	(weapon-type ?weaponType ?wound)
@@ -238,7 +244,7 @@
 	(assert(weapon-of-crime-type ?weaponType))
 )
 
-(defrule weaponDeduction
+(defrule weapon-deduction
 	(declare (salience 20) )
 	(weapon-of-crime-type ?weaponType)
 	(weapon ?weapon ?weaponType)
@@ -248,15 +254,15 @@
 )
 
 ;;;======================================================
-;;; RULES EMPRUNTS
+;;; RULES HAIR
 ;;;======================================================
 
 ;Complexe
-(defrule hairColorMatch
+(defrule hair-color-match
 	(declare (salience 25) )
 	(hair-color-of ?name ?color)
 	(or (hair-color-on-crime ?color)
-	    (hair-color-is-dyed ?name)
+	  (hair-color-is-dyed ?name)
 	)
 	=>
 	(printout t ?name " is a potential killer from matching hair color." crlf)
@@ -264,12 +270,12 @@
 )
 
 ;Complexe
-(defrule hairLenghtMatch
+(defrule hair-lenght-match
 	(declare (salience 25) )
 	(wound-of-crime-type ?wound-type)
 	(hair-lenght-on-crime ?lenght)
 	(or	(hair-lenght-of ?name ?lenght)
-		(and (hair-lenght-of ?name short)
+	  (and (hair-lenght-of ?name short)
 		(test (= ?wound-type laceration))
 		)
 	)
@@ -278,49 +284,53 @@
 	(assert(is-potential-killer-from-hair-lenght ?name))
 )
 
-(defrule hairMatchingAgeSuspect
+;Complexe
+(defrule hair-matching-age-suspect
 	(declare (salience 0) )
-	(hair-youth-groupAge-on-crime ?minAge to ?maxAge)
+	(hair-age-on-crime ?minAge to ?maxAge)
 	(has-age-of ?name ?age)
 	(test (>= ?age ?minAge))
 	(test (<= ?age ?maxAge))
 	=>
 	(printout t ?name " has the right age" crlf)
-	(assert(is-potential-killer-from-hair-youth ?name ?age))
+	(assert(is-potential-killer-from-hair-age ?name))
 )
 
-
+(defrule is-potential-killer-from-hair
+  (is-potential-killer-from-hair-age ?name)
+	(is-potential-killer-from-hair-lenght ?name)
+	(is-potential-killer-from-hair-color ?name)
+	=>
+	(printout t ?name " has hair that match the crime sceen" crlf)
+	(assert(is-potential-killer-from-hair ?name))
+)
 	
 ;;;======================================================
 ;;; RULES ODORS
 ;;;======================================================
 
-(defrule odorDeduction
-	(declare (salience 30) )
-	(like-to-eat ?name ?meal)
-	(lieu-smell-like ?meal)
+
+(defrule odor-deduction
+	(declare (salience 0))
+	(like-to-eat ?name ?lunch)
+	(lunch-smell ?lunch ?smell)
+	(place-smell-like ?smell)
 	=>
 	(printout t ?name " is a potential killer from odor" crlf)
 	(assert(is-potential-killer-from-odor ?name))
 )
 
-(defrule finterprints-found-on-object-matches-suspect-fingerprints
-	(declare (salience 30) )
-	(lieu-found-item-fingerprints ?fingerprintsType)
-	(has-fingerprint ?name ?fingerprintsType)
-	=>
-	(printout t ?name " has matching fingerprints found on the object on the scene" crlf)
-	(assert(fingerprints-found-on-object-matches-suspect-fingerprints ?name))
-)
+;;;======================================================
+;;; RULES FOOTPRINT
+;;;======================================================
 
-(defrule itemfound-fingerprints-and-odor-matching
+(defrule footprint-match-patern-on-crime
 	(declare (salience 30) )
-	(and	(is-potential-killer-from-odor ?name)
-			(fingerprints-found-on-object-matches-suspect-fingerprints ?name)
-	)
+	(footprint-on-crime  ?footprint)
+	(has-footprint ?name ?footprint)
 	=>
-	(printout t ?name " likes to eat the item found on the scene and the odor matches the object found." crlf)
-	(assert(is-potential-killer-from-fingerprints-odor-found-on-crime ?name))
+	(printout t ?name " has matching footprints found on the object on the scene" crlf)
+	(assert(is-potential-killer-from-footprints ?name))
 )
 
 ;;;======================================================
@@ -329,101 +339,110 @@
 
 ;; Dye
 (defrule money-spent-on-hair-dye
-	(declare (salience 50))
-	(hair-color-is-dyed ?name ?is-dyed)
-	(hair-color-of ?name ?hair-color)
-	(dye-price-is ?hair-color ?dye-price)
-	(test (eq ?is-dyed TRUE))
+  (declare (salience 80))
+	(hair-color-is-dyed ?name)
+	(hair-color-of ?name ?color)
+	(dye-price-is ?color ?price)
 	=>
-	(printout t ?name " has dyed hair at the price of " ?dye-price "$" crlf)
-	(assert(has-spent-on-dye ?name ?dye-price))
+	(printout t ?name " WWWWWWWWWWWWWWWWhas dyed hair at the price of " ?price "$" crlf)
+	(assert(has-spent-on-dye ?name ?price))
 )
 
 (defrule money-not-spent-on-hair-dye
-	(declare (salience 50))
+  (declare (salience 80))
 	(suspect ?name)
 	(not (hair-color-is-dyed ?name))
 	=>
-	(printout t ?name " did not pay for dye" crlf)
+	(printout t ?name " DDDDDDDDDDDDDDDDDdid not pay for dye" crlf)
 	(assert(has-spent-on-dye ?name 0))
 )
 
 ;; Gas
 (defrule money-spent-on-gas
-	(declare (salience 50))
+  (declare (salience 80))
 	(gas-used ?name ?vehicule ?gas)
 	(gas-price ?price)
+	(gas-calculated ?name)
 	=>
 	(bind ?money (* ?gas ?price))
-	(printout t ?name " needed " ?money "$ of gas with his " ?vehicule crlf)
+	(printout t ?name " FFFFFFFFFFFFFFFF needed " ?money "$ of gas with his " ?vehicule crlf)
 	(assert(has-spent-on-gas ?name ?money))
 )
 
 (defrule money-not-spent-on-gas
-	(declare (salience 50))
+  (declare (salience 80))
 	(suspect ?name)
+	(gas-calculated ?name)
 	(not (gas-used ?name ?vehicule ?gas))
 	=>
-	(printout t ?name " did not spend money on gas" crlf)
+	(printout t ?name " EEEEEEEEEEEEEEEE did not spend money on gas" crlf)
 	(assert(has-spent-on-gas ?name 0))
 )
 
 ;; Arme
 (defrule money-spent-on-arme
-	(declare (salience 50))
+  (declare (salience 80))
 	(weapon-price ?weapon ?price)
 	(can-be-weapon ?weapon)
 	=>
-	(assert(has-spent-on-weapon ?weapon))
-	(printout t "the killer need " ?price " to buy the " ?weapon crlf)
+	(assert(has-spent-on-weapon ?price))
+	(printout t "DDDDDDDDDDDDDDD the killer need " ?price " to buy the " ?weapon crlf)
 )
 
+;; Odor
+(defrule lunch-possibility
+  (declare (salience 80))
+	(place-smell-like ?smell)
+	(lunch-smell ?lunch ?smell)
+	=>
+	(printout t "CCCCCCCCCCCCCCCC can be lunch " ?lunch crlf)
+	(assert(can-be-lunch ?lunch))
+)
+
+;; Lunch
+(defrule money-spent-on-lunch
+  (declare (salience 85))
+	(can-be-lunch ?lunch)
+	(like-to-eat ?name ?lunch)
+	(lunch ?lunch ?price)
+	=>
+	(assert(has-spent-on-lunch ?name ?price))
+	(printout t ?name " need " ?price " to buy the " ?lunch crlf)
+)
+
+
 ;Complexe
+;; Total
 (defrule receipt-matching
-	(declare (salience 60))
+  (declare (salience 90))
 	(suspect ?name)
 	(receipt-on-crime ?amount)
 	(has-spent-on-dye ?name ?dye)
 	(has-spent-on-gas ?name ?gas)
-	(test (>= ?amount (+ ?gas ?dye)))
+	(has-spent-on-lunch ?name ?lunch)
+	(has-spent-on-weapon ?weapon)
+	(test (>= ?amount (+ ?gas (+ ?dye (+ ?lunch ?weapon)))))
 	=>
-	(printout t ?name " is a potential killer because of the receipt" crlf)
+	(printout t ?name " is a potential killer because of the receipt : " (+ ?gas (+ ?dye (+ ?lunch ?weapon))) "/" ?amount crlf)
 	(assert(is-potential-killer-from-receipt-on-crime ?name))
 )
+
 
 ;;;======================================================
 ;;; Deduction rules
 ;;;======================================================
 
-(defrule test-cas
-	(declare (salience 0) )
-	
-	(theTest ?name)
-	(suspect ?name)
-	
-	=>
-	(printout t "The Ultimate Test for " ?name " worked if bob" crlf)
-	(assert(is-fucking-bob ?name ))
-)
 
 (defrule the-killer-is
-	(declare (salience 50))
-	(is-potential-killer-from-odor ?name)									;;bob rentre
-	;;(is-potential-killer-from-weapon ?name)
-	(is-potential-killer-from-hair-color ?name)								;;bob rentre
-	(is-potential-killer-from-hair-lenght ?name)							;;bob rentre
-	(is-potential-killer-from-fingerprints-odor-found-on-crime ?name)		;;bob rentre
-	;;(is-potential-killer-from-receipt-on-crime ?name)
-	;;(was-there ?name)
-	(is-fucking-bob ?name)													;;Ultimate Test bob condition !
-	
-	(is-potential-killer-from-hair-youth ?name ?groupAge)
-
+	(declare (salience 100))
+	(is-potential-killer-from-hair ?name)
+	(is-potential-killer-from-odor ?name)
+	(is-potential-killer-from-footprints ?name)
+	(is-potential-killer-from-receipt-on-crime ?name)
+	(was-there ?name)
 	=>
 	(assert (is-killer ?name))
-	(printout t "The killer is " ?name " because he fits matches with all the evidenceWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW" crlf)
-	;(printout t "The killer " ?name " will get the sentence of : " ?penalty " in the country of : " ?country crlf)
-	;(halt) J'ai mis sa en commentaire pour voir le VRAI resultat finale (plus que 1 criminel possible actuellement) - Simon
+	(printout t "The killer is " ?name " because he fits matches with all the evidence" crlf)
 )
 
 ;(rules)

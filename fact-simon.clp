@@ -17,22 +17,22 @@
 	(victim-wound laceration)
 )
 
-(deffacts corpse-phase
-	(corpse-body-temperature-is-at-phase 3)
-	(corpse-coagulation-is-at-phase 3)
-	(corpse-skin-detoriation-is-at-phase 3)
+(deffacts victim-phase
+  (victim-temperature-is-at-phase 3)
+	(victim-coagulation-is-at-phase 3)
+	(victim-skin-detoriation-is-at-phase 3)
 )
 
 (deffacts fact-hair
 	(hair-lenght-on-crime long)
 	(hair-color-on-crime blond)
-	(hair-youth-groupAge-on-crime 20 to 30)
+	(hair-age-on-crime 20 to 30)
 )
 
 (deffacts fact-smell
-	(lieu-smell-like fishes)
-	(lieu-found-item nutelas)
-	(lieu-found-item-fingerprints triangle)
+  (place-smell-like fishes)
+	(place-found-item nutelas)
+	(footprint-on-crime triangle)
 )
 
 (deffacts fact-receipt
@@ -51,12 +51,27 @@
 	(body-temperature-is 10)
 )
 
-; Victim body temperature
+(deffacts lunch
+	(lunch sandwich 10)
+	(lunch-smell sandwich cheese)
+	(lunch-smell sandwich ham)
+
+	(lunch cheese-fish 4)
+	(lunch-smell cheese-fish cheese)
+
+	(lunch nutelas 5)
+	(lunch-smell chocolate)
+)
+
+; body temperature
 ; Victim blood coagulation
 ; Victim struggle + not-victim-blood -> Killer = wounded
 ; Fake evidence on crime scene
 ; Finger prints
 ; Victim job -> Victim Tools/weapon
+
+
+
 
 ;;;======================================================
 ;;; FACT OF SUSPECT
@@ -87,7 +102,7 @@
 	(hair-lenght-of karl long)
 	(hair-color-of karl brown)
 	(has-weapon karl knife)
-	(has-fingerprint karl triangle)
+	(has-footprint karl triangle)
 	(has-age-of karl 12)
 
 	;;Sam
@@ -96,7 +111,7 @@
 	(hair-color-of sam blond)
 	(hair-color-is-dyed sam)
 	(has-weapon sam hammer)
-	(has-fingerprint sam circle)
+	(has-footprint sam circle)
 	(has-age-of sam 15)
 
 	;;Bob killer
@@ -105,7 +120,7 @@
 	(hair-lenght-of bob short)
 	(hair-color-of bob blond)
 	(has-weapon bob knife)
-	(has-fingerprint bob triangle)
+	(has-footprint bob triangle)
 	(has-age-of bob 21)
 
 	;;Bob2 killer
@@ -114,13 +129,13 @@
 	(hair-lenght-of bob2 short)
 	(hair-color-of bob2 blond)
 	(has-weapon bob2 knife)
-	(has-fingerprint bob2 triangle)
+	(has-footprint bob2 triangle)
 	(has-age-of bob2 21)
 
 	;;Roger
 	(like-to-eat roger fishes)
 	(has-weapon roger wrench)
-	(has-fingerprint roger triangle)
+	(has-footprint roger triangle)
 	(has-age-of roger 30)
 	
 	;;Nicolas
@@ -140,7 +155,7 @@
 )
 
 ;;;======================================================
-;;; Faits Lieux-temps - nick
+;;; Faits placex-temps - nick
 ;;;======================================================
 
 (deffacts fact-place
@@ -155,8 +170,8 @@
 )
 
 (deffacts fact-mobility
-	(travel-at carr 100 gas 13)
-	(travel-at bike 70 gas 4.5)
+  (travel-by carr 100 gas 13)
+	(travel-by bike 70 gas 4.5)
 )
 
 (deffacts fact-gas
@@ -164,10 +179,10 @@
 )
 
 (deffacts fact-travel-by
-	(travel-by bob carr)
-	(travel-by bob bike)
-	(travel-by karl carr)
-	(travel-by john bike)
+  (travel bob by carr)
+	(travel bob by bike)
+	(travel karl by carr)
+	(travel john by bike)
 )
 
 (deffacts fact-receipt
@@ -179,48 +194,47 @@
 ;;;======================================================
 
 (deffacts wound-types "the wound types"
-    (wound-type laceration)
-    (wound-type puncture)
-    (wound-type avulsion-fracture)
-    (wound-type mouth-erosion)
+  (wound-type laceration)
+	(wound-type puncture)
+	(wound-type avulsion-fracture)
+	(wound-type mouth-erosion)
 )
 
 (deffacts weapon-types "Weapon type classified by wound type"
-    (weapon-type slash laceration)
-    (weapon-type pierce puncture)
-    (weapon-type bullet puncture)
-    (weapon-type blunt avulsion-fracture)
+  (weapon-type slash laceration)
+	(weapon-type pierce puncture)
+	(weapon-type bullet puncture)
+	(weapon-type blunt avulsion-fracture)
 	(weapon-type poison mouth-erosion)
 )
 
 (deffacts temperature-affected-weapon-types
-    (temperature-phase-modification slash 1)
-    (temperature-phase-modification pierce 1)
+  (temperature-phase-modification laceration 1)
 )
 
 (deffacts coagulation-affected-weapon-types
-    (coagulation-phase-modification bullet 1)
+  (coagulation-phase-modification puncture 1)
 )
 
 (deffacts skin-detoriation-affected-weapon-types
-	(skin-detoriation-phase-modification poison 1)
+  (skin-detoriation-phase-modification mouth-erosion 1)
 )
 
 (deffacts weapons "Weapon classified by weapon type"
-    (weapon hammer blunt)
-    (weapon sledgehammer blunt)
-    (weapon wrench blunt)
-    (weapon shovel blunt)
+  (weapon hammer blunt)
+	(weapon sledgehammer blunt)
+	(weapon wrench blunt)
+	(weapon shovel blunt)
 	(weapon pistol bullet)
-    (weapon shotgun shell)
-    (weapon knife slash)
+	(weapon shotgun shell)
+	(weapon knife slash)
 	(weapon blade slash)
 	(weapon machete slash)
-    (weapon screwdriver pierce)
-    (weapon icepick pierce)
-    (weapon nailgun pierce)
-    (weapon poison-vial poison)
-    (weapon poison-seringue poison)
+	(weapon screwdriver pierce)
+	(weapon icepick pierce)
+	(weapon nailgun pierce)
+	(weapon poison-vial poison)
+	(weapon poison-seringue poison)
 )
 
 (deffacts weapons-price
@@ -231,13 +245,13 @@
 
 ; Doesn't make sense, I know
 (deffacts weapon-types "Poison type classified by container type"
-    (weapon-type detergent poison-vial)
-    (weapon-type insecticide poison-vial)
-    (weapon-type windwasher poison-vial)
-    (weapon-type gasoline poison-vial)
-    (weapon-type drugs poison-seringue)
+  (weapon-type detergent poison-vial)
+	(weapon-type insecticide poison-vial)
+	(weapon-type windwasher poison-vial)
+	(weapon-type gasoline poison-vial)
+	(weapon-type drugs poison-seringue)
 	(weapon-type snakebite poison-seringue)
-    (weapon-type SodiumThiopental poison-seringue)
+	(weapon-type SodiumThiopental poison-seringue)
 )
 
 (batch "main.clp")

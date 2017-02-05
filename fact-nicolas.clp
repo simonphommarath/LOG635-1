@@ -13,183 +13,211 @@
 ;;; FACT OF CRIME SCENE
 ;;;======================================================
 
-(deffacts victim-wound "The wound types on the victim"
-	(vitim-wound laceration)
+(deffacts facts-crime-sceen
+	;victim
+	(victim-wound burn)
+	(victim-temperature-is-at-phase 1)
+	(victim-coagulation-is-at-phase 2)
+	(victim-skin-detoriation-is-at-phase 2)
+
+	;haire
+	(hair-lenght-on-crime short)
+	(hair-color-on-crime blue)
+	(hair-age-on-crime 20 to 30)
+
+	;smells
+	(place-smell-like cheese)
+
+	;place
+	(crime-location Naboo)
+	(current-time-is 19)
+
+	;receipt
+	(receipt-on-crime 1800)
+
+  ;footprint
+	(footprint-on-crime rebel)
 )
 
-(deffacts fact
-	(hair-lenght-on-crime long)
-	(hair-color-on-crime blond)
-)
-
-(deffacts fact
-	(lieu-smell-like fishes)
-)
-
-/*
-(deffacts weapon-hint-on-crime-scene "hint on crime of scene"
-	(scene-has shell-casing)
-	(scene-has empty-vial)
-	(scene-has empty-seringue)
-	(scene-has blood-spat)
-)
-*/
-
-(deffacts fact-crime-place
-	(crime-was-at park at-t 15)
-)
-
-; Victim body temperature
-; Victim blood coagulation
-; Victim struggle + not-victim-blood -> Killer = wounded
-; Fake evidence on crime scene
-; Finger prints
-
-; Victim job -> Victim Tools/weapon
 
 ;;;======================================================
 ;;; FACT OF SUSPECT
 ;;;======================================================
 
-(deffacts fact
-	(has-weapon karl knife)
-	(has-weapon bob knife)
-	(has-weapon sam hammer)
-	(has-weapon roger wrench)
-	(has-weapon nicolas shovel)
+(deffacts facts-suspect
+
+  ;Killer
+	(suspect Anakin-Skywalker)
+	(has-age-of Anakin-Skywalker 24)
+	(hair-lenght-of Anakin-Skywalker short)
+	(hair-color-of Anakin-Skywalker green)
+	(hair-color-is-dyed Anakin-Skywalker)
+	(has-footprint Anakin-Skywalker rebel)
+	(like-to-eat Anakin-Skywalker sandwich)
+	(like-to-eat Anakin-Skywalker crunchy)
+	(was-at Anakin-Skywalker Endor from-t 14 to-t 16)
+	(travel Anakin-Skywalker by V-Wings)
+	(travel Anakin-Skywalker by ATT)
+	(travel Anakin-Skywalker by AT-AT)
+
+
+  (suspect Han-Solo)
+	(has-age-of Han-Solo 24)
+	(hair-lenght-of Han-Solo short)
+	(hair-color-of Han-Solo green)
+	(has-footprint Han-Solo rebel)
+	(like-to-eat Han-Solo sandwich)
+	(like-to-eat Han-Solo crunchy)
+	(was-at Han-Solo Alderaan from-t 8 to-t 10)
+	(travel Han-Solo by Millennium-Falcon)
+
+  (suspect Obi-Wan-Kenobi)
+	(has-age-of Obi-Wan-Kenobi 24)
+	(hair-lenght-of Obi-Wan-Kenobi long)
+	(hair-color-of Obi-Wan-Kenobi red)
+	(hair-color-is-dyed Obi-Wan-Kenobi)
+	(has-footprint Obi-Wan-Kenobi rebel)
+	(like-to-eat Obi-Wan-Kenobi super-snack)
+	(was-at Obi-Wan-Kenobi Aquilae from-t 12 to-t 13)
+	(travel Obi-Wan-Kenobi by X-Wings)
+	(travel Obi-Wan-Kenobi by U-Wings)
+
+  (suspect Jyn-Erso)
+	(has-age-of Jyn-Erso 24)
+	(hair-lenght-of Jyn-Erso short)
+	(hair-color-of Jyn-Erso red)
+	(has-footprint Jyn-Erso rebel)
+	(like-to-eat Jyn-Erso sandwich)
+	(like-to-eat Jyn-Erso crunchy)
+	(was-at Jyn-Erso Alderaan from-t 14 to-t 16)
+	(travel Jyn-Erso by V-Wings)
+
 )
 
-(deffacts fact
-	(like-to-eat karl nutelas)
-	(hair-lenght-of karl long)
-	(hair-color-of karl blond)
 
-	(like-to-eat sam fishes)
-	(hair-lenght-of sam long)
-	(hair-color-of sam dyed)
+;;;======================================================
+;;; FACT OF ARMS 
+;;;======================================================
 
-	(like-to-eat bob nutelas)
-	(like-to-eat bob fishes)
-	(hair-lenght-of bob short)
-	(hair-color-of bob blond)
-	
-	(like-to-eat roger fishes)
+(deffacts wound-types
+  (wound-type laceration)
+	(wound-type burn)
+	(wound-type ice)
+	(wound-type fracture)
+	(wound-type internal)
+)
+
+(deffacts weapon-types
+  (weapon-type blade laceration)
+	(weapon-type laser laceration)
+	(weapon-type laser burn)
+	(weapon-type fire burn)
+	(weapon-type ice-canon ice)
+	(weapon-type blunt fracture)
+	(weapon-type poison internal)
+)
+
+(deffacts temperature-affected-weapon-types
+  (temperature-phase-modification burn 1)
+	(temperature-phase-modification ice -1)
+)
+
+(deffacts coagulation-affected-weapon-types
+  (coagulation-phase-modification burn -2)
+)
+
+(deffacts skin-detoriation-affected-weapon-types
+  (skin-detoriation-phase-modification internal 1)
+)
+
+(deffacts weapons
+  (weapon lightsaber laser)
+	(weapon blaster laser)
+
+  (weapon flame-thrower fire)
+	(weapon napalme-thrower fire)
+
+  (weapon ice-gun ice)
+	(weapon mace blunt)
+	(weapon flail blunt)
+
+  (weapon sword blade)
+	(weapon knife blade)
+
+  (weapon cyanide poison)
+	(weapon strychnine poison)
+	(weapon rodians poison)
+)
+
+(deffacts weapons
+  (weapon-price lightsaber 2000)
+	(weapon-price blaster 1000)
+	(weapon-price flame-thrower 1200)
+	(weapon-price napalme-thrower 1450)
+	(weapon-price ice-gun 1300)
+	(weapon-price mace 600)
+	(weapon-price flail 800)
+	(weapon-price sword 1400)
+	(weapon-price knife 200)
+	(weapon-price cyanide 300)
+	(weapon-price strychnine 100)
+	(weapon-price rodians 500)
 )
 
 ;;;======================================================
-;;; Faits Lieux-temps - nick
+;;; FACT OF PLACE 
 ;;;======================================================
-
-(deffacts fact-place
-	(was-at karl park from-t 14 to-t 16)
-	(was-at bob park from-t 8 to-t 10)
-	(was-at bob cafe from-t 10 to-t 12)
-	(was-at john cafe from-t 10 to-t 14)
-)
 
 (deffacts fact-distance
-	(distance-between park cafe is-t 100)
+  (distance-between Naboo Tatooine is-t 10000)
+	(distance-between Naboo Aquilae is-t 23000)
+	(distance-between Naboo Endor is-t 1200)
+	(distance-between Naboo Alderaan is-t 250)
 )
 
+;;;======================================================
+;;; FACT OF VEICHUL
+;;;======================================================
+
 (deffacts fact-mobility
-	(travel-at carr 100 gas 13)
-	(travel-at bike 70 gas 4.5)
+  (travel-by X-Wings 995 gas 5.5)
+	(travel-by U-Wings 940 gas 4.5)
+	(travel-by V-Wings 930 gas 12)
+	(travel-by ATT 800 gas 23)
+	(travel-by AT-AT 30 gas 50)
+	(travel-by Millennium-Falcon 1050 gas 25)
 )
 
 (deffacts fact-gas
-	(gas-price 2)
-)
-
-(deffacts fact-travel-by
-	(travel-by bob carr)
-	(travel-by bob bike)
-	(travel-by karl carr)
-	(travel-by john bike)
-)
-
-(deffacts suspect
-	(suspect bob)
-	(suspect karl)
-	(suspect john)
-)
-
-(deffacts fact-receipt
-	(receipt-on-crime 100)
+  (gas-price 4.53)
 )
 
 ;;;======================================================
-;;; FACT OF WEAPON
+;;; FACT OF LUNCH
 ;;;======================================================
 
-(deffacts wound-types "the wound types"
-    (wound-type laceration)
-    (wound-type puncture)
-    (wound-type avulsion-fracture)
-    (wound-type mouth-erosion)
-    (wound-type blue-skin)
-    (wound-type red-eye)
-    (wound-type skin-rash)
+(deffacts lunch
+  (lunch sandwich 10)
+	(lunch-smell sandwich cheese)
+	(lunch-smell sandwich ham)
+
+  (lunch super-snack 600)
+	(lunch-smell snack cheese)
+
+  (lunch nutelas 5)
+	(lunch-smell chocolate)
+
+  (lunch crunchy 4)
+	(lunch-smell chocolate)
 )
 
-(deffacts weapon-types "Weapon type classified by wound type"
-    (weapon-type slash laceration)
-    (weapon-type pierce puncture)
-    (weapon-type bullet puncture)
-    (weapon-type shell puncture)
-    (weapon-type blunt avulsion-fracture)
-	(weapon-type poison mouth-erosion)
-    (weapon-type poison blue-skin)
-    (weapon-type poison red-eye)
-    (weapon-type poison skin-rash)
-)
-
-(deffacts weapons "Weapon classified by weapon type"
-    (weapon hammer blunt)
-    (weapon sledgehammer blunt)
-    (weapon wrench blunt)
-    (weapon shovel blunt)
-	(weapon pistol bullet)
-    (weapon shotgun shell)
-    (weapon knife slash)
-	(weapon blade slash)
-	(weapon machete slash)
-    (weapon screwdriver pierce)
-    (weapon icepick pierce)
-    (weapon nailgun pierce)
-    (weapon poison-vial poison)
-    (weapon poison-seringue poison)
-)
-
-; Doesn't make sense, I know
-(deffacts weapon-types "Poison type classified by container type"
-    (weapon-type detergent poison-vial)
-    (weapon-type insecticide poison-vial)
-    (weapon-type windwasher poison-vial)
-    (weapon-type gasoline poison-vial)
-    (weapon-type drugs poison-seringue)
-	(weapon-type snakebite poison-seringue)
-    (weapon-type SodiumThiopental poison-seringue)
-)
-
-(deffacts job "Weapon classified by jobs"
-    (job detergent garagist)
-    (job insecticide pestControl)
-    (job windwasher garagist)
-    (job gasoline garagist)
-    (job drugs doctor)
-	(job snakebite pestControl)
-    (job SodiumThiopental doctor)
-	(job hammer garagist)
-	(job sledgehammer garagist)
-	(job wrench garagist)
-	(job shovel garagist)
-	(job pistol policeOfficer)
-	(job shotgun policeOfficer)
-	(job knife policeOfficer)
-	(job blade policeOfficer)
-	(job machete pestControl)
-	(job screwdriver garagist)
-	(job nailgun garagist)
+;;;======================================================
+;;; FACT OF LUNCH
+;;;======================================================
+(deffacts fact-dye-price
+  (dye-price-is red 100)
+	(dye-price-is green 150)
+	(dye-price-is blue 200)
 )
 
 (batch "main.clp")
