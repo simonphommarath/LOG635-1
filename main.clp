@@ -251,7 +251,8 @@
 ;;; RULES RECEIPT
 ;;;======================================================
 
-(defrule moneySpentOnHairDye
+;; Dye
+(defrule money-spent-on-hair-dye
 	(declare (salience 0))
 	(hair-color-is-dyed ?name ?is-dyed)
 	(hair-color-of ?name ?hair-color)
@@ -262,7 +263,7 @@
 	(assert(has-spent-on-dye ?name ?dye-price))
 )
 
-(defrule moneyNotSpentOnHairDye
+(defrule money-not-spent-on-hair-dye
 	(declare (salience 0))
 	(suspect ?name)
 	(not (hair-color-is-dyed ?name))
@@ -271,7 +272,8 @@
 	(assert(has-spent-on-dye ?name 0))
 )
 
-(defrule moneySpentOngas
+;; Gas
+(defrule money-spent-on-gas
 	(declare (salience 0))
 	(gas-used ?name ?car ?gas)
 	(gas-price ?price)
@@ -281,13 +283,23 @@
 	(assert(has-spent-on-gas ?name ?money))
 )
 
-(defrule moneyNotSpentOnGas
+(defrule money-not-spent-on-gas
 	(declare (salience 0))
 	(suspect ?name)
 	(not (gas-used ?name ?car ?gas))
 	=>
 	(printout t ?name " did not spend money on gas " crlf)
 	(assert(has-spent-on-gas ?name 0))
+)
+
+;; Arme
+(defrule money-spent-on-arme
+	(declare (salience 0))
+	(weapon-price ?weapon ?price)
+	(can-be-weapon ?weapon)
+	=>
+	(assert(has-spent-on-weapon ?weapon))
+	(printout t "the killer need " ?price " to buy the " ?weapon crlf)
 )
 
 (defrule receipt-matching

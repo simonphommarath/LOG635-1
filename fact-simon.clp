@@ -215,6 +215,12 @@
     (weapon poison-seringue poison)
 )
 
+(deffacts weapons-price
+	(weapon-price knife 50)
+	(weapon-price blade 150)
+	(weapon-price machete 180)
+)
+
 ; Doesn't make sense, I know
 (deffacts weapon-types "Poison type classified by container type"
     (weapon-type detergent poison-vial)
