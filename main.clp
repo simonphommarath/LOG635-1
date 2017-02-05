@@ -218,27 +218,12 @@
 
 (defrule hairMatchingAgeSuspect
 	(declare (salience 0) )
-	
-	(hair-youth-groupAge-on-crime ?ageGroup)
-	(hairYouth ?name ?ageGroup)
-	
-	=>
-	(if (eq ?ageGroup 1020) then
-		(bind ?tgroupAge between1030)
-		(printout t "The suspect " ?name " hair youth matches the hair found on crime : between1030" crlf)
-	else (if (eq ?ageGroup 2030) then
-		(bind ?tgroupAge between2030)
-		(printout t "The suspect " ?name " hair youth matches the hair found on crime : between2030" crlf)
-	else (if (eq ?ageGroup 3040) then
-		(bind ?tgroupAge between3040)
-		(printout t "The suspect " ?name " hair youth matches the hair found on crime : between3040" crlf)
-	else
-		(bind ?tgroupAge unknown)
-		(printout t "The suspect " ?name " hair youth is unknown" crlf)
-	)))
-	
-	(assert(is-potential-killer-from-hair-youth-groupAge ?name ?tgroupAge))
-
+	(hair-youth-groupAge-on-crime ?minAge to ?maxAge)
+	(has-age-of ?name ?age)
+	(test (>= ?age ?minAge))
+	(test (<= ?age ?maxAge))
+	=>	
+	(assert(is-potential-killer-from-hair-youth ?name ?age))
 )
 
 
@@ -379,7 +364,7 @@
 	;;(is-potential-killer-from-receipt-on-crime ?name)
 	;;(was-there ?name)
 	
-	;;(is-potential-killer-from-hair-youth-groupAge ?name ?groupAge)
+	(is-potential-killer-from-hair-youth ?name ?groupAge)
 	;;(penitenceOfSuspect ?name ?penalty ?country)
 
 	(started)
