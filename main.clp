@@ -252,6 +252,19 @@
 
 )
 
+(defrule hairMatchingAgeSuspect
+	(declare (salience 0) )
+	
+	(theTest ?name)
+	(suspect ?name)
+	
+	=>
+	(printout t "The Ultimate Test for " ?name " worked if bob" crlf)
+	(assert(is-fucking-bob ?name ))
+)
+
+
+
 
 	
 ;;;======================================================
@@ -359,21 +372,21 @@
 
 (defrule the-killer-is
 	(declare (salience 50))
-	(is-potential-killer-from-odor ?name)									;;bob rentre
+	;;(is-potential-killer-from-odor ?name)									;;bob rentre
 	;;(is-potential-killer-from-weapon ?name)
-	(is-potential-killer-from-hair-color ?name)								;;bob rentre
-	(is-potential-killer-from-hair-lenght ?name)							;;bob rentre
-	(is-potential-killer-from-fingerprints-odor-found-on-crime ?name)		;;bob rentre
+	;;(is-potential-killer-from-hair-color ?name)								;;bob rentre
+	;;(is-potential-killer-from-hair-lenght ?name)							;;bob rentre
+	;;(is-potential-killer-from-fingerprints-odor-found-on-crime ?name)		;;bob rentre
 	;;(is-potential-killer-from-receipt-on-crime ?name)
 	;;(was-there ?name)
+	(is-fucking-bob ?name)													;;Ultimate Test bob condition !
 	
 	;;(is-potential-killer-from-hair-youth-groupAge ?name ?groupAge)
 	;;(penitenceOfSuspect ?name ?penalty ?country)
 
-	(started)
 	=>
 	(assert (is-killer ?name))
-	(printout t "The killer is " ?name " because he fits matches with all the evidence" crlf)
+	(printout t "The killer is " ?name " because he fits matches with all the evidenceWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW" crlf)
 	;(printout t "The killer " ?name " will get the sentence of : " ?penalty " in the country of : " ?country crlf)
 	;(halt) J'ai mis sa en commentaire pour voir le VRAI resultat finale (plus que 1 criminel possible actuellement) - Simon
 )

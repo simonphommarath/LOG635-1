@@ -63,6 +63,7 @@
 ;;;======================================================
 
 (deffacts suspect
+	(theTest bob)
 	(suspect bob)
 	(suspect karl)
 	(suspect sam)
