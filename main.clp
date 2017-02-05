@@ -226,6 +226,33 @@
 	(printout t ?name " is a potential killer from hair lenght matching." crlf)
 	(assert(is-potential-killer-from-hair-lenght ?name))
 )
+
+(defrule hairMatchingAgeSuspect
+	(declare (salience 0) )
+	
+	(hair-youth-groupAge-on-crime ?ageGroup)
+	(hairYouth ?name ?ageGroup)
+	
+	=>
+	(if (eq ?ageGroup 1020) then
+		(bind ?tyouth between1030)
+		(printout t "The suspect " ?name " hair youth matches the hair found on crime : between1030" crlf)
+	else (if (eq ?ageGroup 2030) then
+		(bind ?tyouth between2030)
+		(printout t "The suspect " ?name " hair youth matches the hair found on crime : between2030" crlf)
+	else (if (eq ?ageGroup 3040) then
+		(bind ?tyouth between3040)
+		(printout t "The suspect " ?name " hair youth matches the hair found on crime : between3040" crlf)
+	else
+		(bind ?tyouth old)
+		(printout t "The suspect " ?name " hair youth is unknown" crlf)
+	)))
+	
+	(assert(is-potential-killer-from-hair-youth-groupAge ?name)
+
+)
+
+
 	
 ;;;======================================================
 ;;; RULES ODORS
@@ -340,6 +367,7 @@
 	(is-potential-killer-from-receipt-on-crime ?name)
 	(was-there ?name)
 	
+	;(is-potential-killer-from-hair-youth-groupAge ?name)
 	;(penitenceOfSuspect ?name ?penalty ?country)
 
 	(started)
