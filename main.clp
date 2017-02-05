@@ -18,9 +18,9 @@
 	(victim-wound ?wound)
 	(temperature-phase-modification ?wound ?phaseModif)
 	=>
-	(bind ?newPhase (+ ?phase ?phaseModif))
-	(assert (actual-victim-temperature-is-at-phase ?newPhase))
-	(printout t "The actual body temperature is at phase " ?newPhase crlf)
+	(bind ?new-phase (+ ?phase ?phaseModif))
+	(assert (actual-victim-temperature-is-at-phase ?new-phase))
+	(printout t "The real body temperature phase is " ?new-phase " because of the wound type" crlf)
 )
 
 ;; Si on a pas de modification lier au type d'arme
@@ -31,7 +31,7 @@
 	(not (temperature-phase-modification ?wound ?phaseModif))
 	=>
 	(assert (actual-victim-temperature-is-at-phase ?phase))
-	(printout t "The body temperature did not change because of the weapon" crlf)
+	(printout t "The weapon did not change the body temperature" crlf)
 )
 
 ;; On calcule le temps de la mort
@@ -53,8 +53,7 @@
 		(bind ?tmax 10)
 	)))
 	(assert (body-temperature-is-at-phase ?phase ?tmin to ?tmax))
-	(printout t "The body temperature is at phase " ?phase crlf)
-	(printout t "From the body temperature, we know he died between " ?tmin " and " ?tmax crlf)
+	(printout t "The body temperature is at phase " ?phase ", thus we know he died between " ?tmin " and " ?tmax crlf)
 )
 
 ;;;======================================================
@@ -67,9 +66,8 @@
 	(victim-wound ?wound)
 	(coagulation-phase-modification ?wound ?phaseModif)
 	=>
-	(bind ?newPhase (+ ?phase ?phaseModif))
-	(assert (actual-victim-coagulation-is-at-phase ?newPhase))
-	(printout t "The actual body coagulation is at phase " ?newPhase crlf)
+	(bind ?new-phase (+ ?phase ?phaseModif))
+	(printout t "The real body coagulation phase is " ?new-phase " because of the wound type" crlf)
 )
 
 ; Si on a pas de modification lie
@@ -80,7 +78,7 @@
 	(not (coagulation-affected-by-weapon-type ?wound ?phaseModif))
 	=>
 	(assert (actual-victim-coagulation-is-at-phase ?phase))
-	(printout t "The body coagulation did not change from the weapon" crlf)
+	(printout t "The weapon did not change the body coagulation" crlf)
 )
 
 ; On calcule l'age
@@ -102,8 +100,7 @@
 		(bind ?tmax 11)
 	)))
 	(assert (coagulation-is-at-phase ?phase ?tmin to ?tmax))
-	(printout t "The body coagulation is at phase " ?phase crlf)
-	(printout t "From the body coagulation, we know he died between " ?tmin " and " ?tmax crlf)
+	(printout t "The body coagulation is at phase " ?phase ", thus we know he died between " ?tmin " and " ?tmax crlf)
 )
 
 ;;;======================================================
@@ -115,9 +112,9 @@
 	(victim-wound ?wound)
 	(skin-detoriation-phase-modification ?wound ?phaseModif)
 	=>
-	(bind ?newPhase (+ ?phase ?phaseModif))
-	(assert (actual-victim-skin-detoriation-is-at-phase ?newPhase))
-	(printout t "The actual body skin-detoriation is at phase " ?newPhase crlf)
+	(bind ?new-phase (+ ?phase ?phaseModif))
+	(assert (actual-victim-skin-detoriation-is-at-phase ?new-phase))
+	(printout t "The real body skin detoriation phase is " ?new-phase " because of the wound type" crlf)
 )
 
 (defrule victim-actual-skin-detoriation
@@ -127,7 +124,7 @@
 	(not (skin-detoriation-affected-by-weapon-type ?wound ?phaseModif))
 	=>
 	(assert (actual-victim-skin-detoriation-is-at-phase ?phase))
-	(printout t "The body skin detoriation did not change from the weapon" crlf)
+	(printout t "The weapon did not change the body's skin detoriation" crlf)
 )
 
 (defrule victim-skin-detoriation
@@ -145,8 +142,7 @@
 		(bind ?tmax 9)
 	))
 	(assert (skin-detoriation-is-at-phase ?phase ?tmin to ?tmax))
-	(printout t "The body skin detoriation is at phase " ?phase crlf)
-	(printout t "From the skin detoriation, we know he died between " ?tmin " and " ?tmax crlf)
+	(printout t "The body' skin detoriation is at phase " ?phase ", thus we know he died between " ?tmin " and " ?tmax crlf)
 )
 
 
@@ -161,7 +157,7 @@
 	=>
 	(bind ?tmin (min ?max-skin (min ?max-coag ?max-temp)))
 	(assert (time-past-since-crime ?tmin))
-	(printout t "The crime was committed " ?tmin " hours ago" crlf)
+	(printout t "From the body examination, we know the crime was committed " ?tmin " hours ago" crlf)
 )
 
 (defrule victim-time-location
@@ -170,10 +166,10 @@
 	(current-time-is ?current-time)
 	(crime-location ?location)
 	=>
-	(printout t "The current time is " ?current-time " hours " crlf)
+	(printout t "The body was analysed at " ?current-time " hours " crlf)
 	(bind ?death-time (- ?current-time ?past-time))
 	(assert (crime-was-at ?location at-t ?death-time))
-	(printout t "The crime was at the " ?location " at " ?death-time " hours" crlf)
+	(printout t "Thus, the crime was at the " ?location " at " ?death-time " hours" crlf)
 )
 
 ;;;======================================================
@@ -181,15 +177,15 @@
 ;;;======================================================
 
 ;Complexe
-(defrule was-there
+(defrule is-potential-killer-from-location-on-crime
 	(declare (salience 13))
 	(crime-was-at ?location at-t ?tcrime)
 	(was-at ?name ?location from-t ?tstart to-t ?tend)
 	(test (>= ?tcrime ?tstart))
 	(test (<= ?tcrime ?tend))
 	=>
-	(printout t ?name " was on the crime scene on time of death" crlf)
-	(assert (was-there ?name))
+	(printout t ?name " was on the crime location on time of death" crlf)
+	(assert (is-potential-killer-from-location-on-crime ?name))
 	(assert (gas-used ?name none 0))
 	(assert (gas-calculated ?name))
 )
@@ -211,7 +207,7 @@
 )
 
 ;Complexe
-(defrule was-there-adjusted
+(defrule is-potential-killer-from-location-on-crime-adjusted
 	(declare (salience 15))
 	(crime-was-at ?locationCrime at-t ?tcrime)
 	(was-at-adjusted ?name ?location from-t ?tstart to-t ?tend)
@@ -219,7 +215,7 @@
 		(test (>= ?tcrime ?tend)))
 	=>
 	(printout t ?name " could be on the crime scene on time of death" crlf)
-	(assert (was-there ?name))
+	(assert (is-potential-killer-from-location-on-crime ?name))
 )
 
 ;;;======================================================
@@ -231,7 +227,7 @@
 	(victim-wound ?wound)
 	(wound-type ?wound)
 	=>
-	(printout t "Wound of victim is " ?wound " types" crlf)
+	(printout t "The wound on the victim is of " ?wound " types" crlf)
 	(assert(wound-of-crime-type ?wound))
 )
 
@@ -240,7 +236,7 @@
 	(wound-of-crime-type ?wound)
 	(weapon-type ?weaponType ?wound)
 	=>
-	(printout t "the weapon of crime can be of " ?weaponType " types" crlf)
+	(printout t "The weapon of crime is in the categorie of " ?weaponType " weapon" crlf)
 	(assert(weapon-of-crime-type ?weaponType))
 )
 
@@ -249,7 +245,7 @@
 	(weapon-of-crime-type ?weaponType)
 	(weapon ?weapon ?weaponType)
 	=>
-	(printout t "the weapon of crime can be the " ?weapon crlf)
+	(printout t "The weapon of crime can be: " ?weapon crlf)
 	(assert(can-be-weapon ?weapon))
 )
 
@@ -265,7 +261,7 @@
 	  (hair-color-is-dyed ?name)
 	)
 	=>
-	(printout t ?name " is a potential killer from matching hair color." crlf)
+	(printout t ?name " is a potential killer from matching hair color" crlf)
 	(assert(is-potential-killer-from-hair-color ?name))
 )
 
@@ -280,7 +276,7 @@
 		)
 	)
 	=>
-	(printout t ?name " is a potential killer from hair lenght matching." crlf)
+	(printout t ?name " is a potential killer from matching hair lenght" crlf)
 	(assert(is-potential-killer-from-hair-lenght ?name))
 )
 
@@ -301,7 +297,7 @@
 	(is-potential-killer-from-hair-lenght ?name)
 	(is-potential-killer-from-hair-color ?name)
 	=>
-	(printout t ?name " has hair that match the crime sceen" crlf)
+	(printout t ?name " has hair that fits the one on the crime sceen" crlf)
 	(assert(is-potential-killer-from-hair ?name))
 )
 	
@@ -316,7 +312,7 @@
 	(lunch-smell ?lunch ?smell)
 	(place-smell-like ?smell)
 	=>
-	(printout t ?name " is a potential killer from odor" crlf)
+	(printout t ?name " is a potential killer from odor on the crime scene" crlf)
 	(assert(is-potential-killer-from-odor ?name))
 )
 
@@ -329,7 +325,7 @@
 	(footprint-on-crime  ?footprint)
 	(has-footprint ?name ?footprint)
 	=>
-	(printout t ?name " has matching footprints found on the object on the scene" crlf)
+	(printout t ?name " has the same footprints found on the object on the scene" crlf)
 	(assert(is-potential-killer-from-footprints ?name))
 )
 
@@ -344,7 +340,7 @@
 	(hair-color-of ?name ?color)
 	(dye-price-is ?color ?price)
 	=>
-	(printout t ?name " WWWWWWWWWWWWWWWWhas dyed hair at the price of " ?price "$" crlf)
+	(printout t ?name " has dyed hair at the price of " ?price "$" crlf)
 	(assert(has-spent-on-dye ?name ?price))
 )
 
@@ -353,7 +349,7 @@
 	(suspect ?name)
 	(not (hair-color-is-dyed ?name))
 	=>
-	(printout t ?name " DDDDDDDDDDDDDDDDDdid not pay for dye" crlf)
+	(printout t ?name " did not pay for dye" crlf)
 	(assert(has-spent-on-dye ?name 0))
 )
 
@@ -365,7 +361,7 @@
 	(gas-calculated ?name)
 	=>
 	(bind ?money (* ?gas ?price))
-	(printout t ?name " FFFFFFFFFFFFFFFF needed " ?money "$ of gas with his " ?vehicule crlf)
+	(printout t ?name " needed " ?money "$ of gas with his " ?vehicule crlf)
 	(assert(has-spent-on-gas ?name ?money))
 )
 
@@ -375,7 +371,7 @@
 	(gas-calculated ?name)
 	(not (gas-used ?name ?vehicule ?gas))
 	=>
-	(printout t ?name " EEEEEEEEEEEEEEEE did not spend money on gas" crlf)
+	(printout t ?name " did not spend money on gas" crlf)
 	(assert(has-spent-on-gas ?name 0))
 )
 
@@ -386,7 +382,7 @@
 	(can-be-weapon ?weapon)
 	=>
 	(assert(has-spent-on-weapon ?price))
-	(printout t "DDDDDDDDDDDDDDD the killer need " ?price " to buy the " ?weapon crlf)
+	(printout t "The killer need " ?price " to buy the " ?weapon crlf)
 )
 
 ;; Odor
@@ -395,7 +391,7 @@
 	(place-smell-like ?smell)
 	(lunch-smell ?lunch ?smell)
 	=>
-	(printout t "CCCCCCCCCCCCCCCC can be lunch " ?lunch crlf)
+	(printout t "Can be lunch " ?lunch crlf)
 	(assert(can-be-lunch ?lunch))
 )
 
@@ -423,7 +419,7 @@
 	(has-spent-on-weapon ?weapon)
 	(test (>= ?amount (+ ?gas (+ ?dye (+ ?lunch ?weapon)))))
 	=>
-	(printout t ?name " is a potential killer because of the receipt : " (+ ?gas (+ ?dye (+ ?lunch ?weapon))) "/" ?amount crlf)
+	(printout t ?name " is a potential killer because of the receipt : " (+ ?gas (+ ?dye (+ ?lunch ?weapon))) " being under " ?amount "$" crlf)
 	(assert(is-potential-killer-from-receipt-on-crime ?name))
 )
 
@@ -439,10 +435,10 @@
 	(is-potential-killer-from-odor ?name)
 	(is-potential-killer-from-footprints ?name)
 	(is-potential-killer-from-receipt-on-crime ?name)
-	(was-there ?name)
+	(is-potential-killer-from-location-on-crime ?name)
 	=>
 	(assert (is-killer ?name))
-	(printout t "The killer is " ?name " because he fits matches with all the evidence" crlf)
+	(printout t "The killer is " ?name " because he fits all the evidence from the crime scene" crlf)
 )
 
 ;(rules)
