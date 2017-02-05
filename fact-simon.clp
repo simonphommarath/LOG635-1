@@ -30,8 +30,7 @@
 )
 
 (deffacts fact-smell
-	(lieu-smell-like fishes)
-	(lieu-found-item nutelas)
+	(lieu-smell-like cheese)
 	(lieu-found-item-fingerprints triangle)
 )
 
@@ -69,6 +68,18 @@
 	(suspect sam)
 	(suspect bob2)
 	(suspect roger)
+)
+
+(deffacts lunch
+	(lunch sandwich 10)
+	(lunch-smell sandwich cheese)
+	(lunch-smell sandwich ham)
+
+	(lunch cheese-fish 4)
+	(lunch-smell cheese-fish cheese)
+
+	(lunch nutelas 5)
+	(lunch-smell chocolate)
 )
 
 (deffacts fact
