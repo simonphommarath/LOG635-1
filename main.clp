@@ -159,7 +159,7 @@
 ;;; RULES VICTIM-WOUND
 ;;;======================================================
 
-(defrule woundTypeDeduction
+(defrule wound-type-deduction
 	(declare (salience 0) )
 	(victim-wound ?wound)
 	(wound-type ?wound)
@@ -168,7 +168,7 @@
 	(assert(wound-of-crime-type ?wound))
 )
 
-(defrule weaponTypeDeduction
+(defrule weapon-type-deduction
 	(declare (salience 0) )
 	(wound-of-crime-type ?wound)
 	(weapon-type ?weaponType ?wound)
@@ -177,7 +177,7 @@
 	(assert(weapon-of-crime-type ?weaponType))
 )
 
-(defrule weaponDeduction
+(defrule weapon-deduction
 	(declare (salience 0) )
 	(weapon-of-crime-type ?weaponType)
 	(weapon ?weapon ?weaponType)
@@ -186,17 +186,6 @@
 	(assert(can-be-weapon ?weapon))
 )
 
-/*
-; To be removed maybe
-(defrule job-has-weapon
-	(declare (salience 0) )
-	(can-be-weapon ?weapon)
-	(job ?weapon ?job)
-	=>
-	(printout t "The suspect can be " ?name" based on weapon possibility" crlf)
-	(assert(is-potential-killer-from-weapon ?name))
-)
-*/
 
 ;;;======================================================
 ;;; RULES EMPRUNTS
@@ -231,17 +220,19 @@
 ;;; RULES ODORS
 ;;;======================================================
 
-(defrule odorDeduction
-	(declare (salience 0) )
-	(like-to-eat ?name ?meal)
-	(lieu-smell-like ?meal)
+(defrule odor-deduction
+	(declare (salience 0))
+	(like-to-eat ?name ?lunch)
+	(lunch-smell ?lunch ?smell)
+	(lieu-smell-like ?smell)
 	=>
 	(printout t ?name " is a potential killer from odor" crlf)
 	(assert(is-potential-killer-from-odor ?name))
 )
 
+
 (defrule finterprints-found-on-object-matches-suspect-fingerprints
-	(declare (salience 0) )
+	(declare (salience 0))
 	(lieu-found-item-fingerprints ?fingerprintsType)
 	(has-fingerprint ?name ?fingerprintsType)
 	=>
@@ -249,11 +240,11 @@
 	(assert(fingerprints-found-on-object-matches-suspect-fingerprints ?name))
 )
 
+
 (defrule itemfound-fingerprints-and-odor-matching
-	(declare (salience 0) )
-	(and	(is-potential-killer-from-odor ?name)
-			(fingerprints-found-on-object-matches-suspect-fingerprints ?name)
-	)
+	(declare (salience 0))
+	(is-potential-killer-from-odor ?name)
+	(fingerprints-found-on-object-matches-suspect-fingerprints ?name)
 	=>
 	(printout t ?name " likes to eat the item found on the scene and the odor matches the object found." crlf)
 	(assert(is-potential-killer-from-fingerprints-odor-found-on-crime ?name))
@@ -266,13 +257,12 @@
 ;; Dye
 (defrule money-spent-on-hair-dye
 	(declare (salience 0))
-	(hair-color-is-dyed ?name ?is-dyed)
-	(hair-color-of ?name ?hair-color)
-	(dye-price-is ?hair-color ?dye-price)
-	(test (eq ?is-dyed TRUE))
+	(hair-color-is-dyed ?name ?dyed)
+	(hair-color-of ?name ?color)
+	(dye-price-is ?color ?price)
 	=>
-	(printout t ?name " has dyed hair at the price of " ?dye-price "$" crlf)
-	(assert(has-spent-on-dye ?name ?dye-price))
+	(printout t ?name " has dyed hair at the price of " ?price "$" crlf)
+	(assert(has-spent-on-dye ?name ?price))
 )
 
 (defrule money-not-spent-on-hair-dye
@@ -310,17 +300,39 @@
 	(weapon-price ?weapon ?price)
 	(can-be-weapon ?weapon)
 	=>
-	(assert(has-spent-on-weapon ?weapon))
+	(assert(has-spent-on-weapon ?price))
 	(printout t "the killer need " ?price " to buy the " ?weapon crlf)
 )
 
+;; Odor
+(defrule lunch-possibility
+	(declare (salience 0))
+	(lieu-smell-like ?smell)
+	(lunch-smell ?lunch ?smell)
+	=>
+	(printout t "can be lunch " ?lunch crlf)
+	(assert(can-be-lunch ?lunch))
+)
+
+(defrule money-spent-on-lunch
+	(declare (salience 0))
+	(can-be-lunch ?lunch)
+	(lunch ?lunch ?price)
+	=>
+	(assert(has-spent-on-lunch ?price))
+	(printout t "the killer need " ?price " to buy the " ?lunch crlf)
+)
+
+;; Total
 (defrule receipt-matching
 	(declare (salience 45))
 	(suspect ?name)
 	(receipt-on-crime ?amount)
 	(has-spent-on-dye ?name ?dye)
 	(has-spent-on-gas ?name ?gas)
-	(test (>= ?amount (+ ?gas ?dye)))
+	(has-spent-on-lunch ?name ?lunch)
+	(has-spent-on-weapon ?weapon)
+	(test (>= ?amount (+ ?gas (+ ?dye (+ ?lunch ?weapon)))))
 	=>
 	(printout t ?name " is a potential killer because of the receipt" crlf)
 	(assert(is-potential-killer-from-receipt-on-crime ?name))
