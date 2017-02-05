@@ -18,7 +18,7 @@
 )
 
 (deffacts corpse-phase
-	(corpse-body-temperature-is-at-phase 4)
+	(corpse-body-temperature-is-at-phase 3)
 	(corpse-coagulation-is-at-phase 3)
 	(corpse-skin-detoriation-is-at-phase 3)
 )
@@ -26,11 +26,11 @@
 (deffacts fact-hair-lenght
 	(hair-lenght-on-crime long)
 	(hair-color-on-crime blond)
-	(hair-youth-groupAge-on-crime 2030)
 )
 
 (deffacts fact-smell
-	(lieu-smell-like cheese)
+	(lieu-smell-like fishes)
+	(lieu-found-item nutelas)
 	(lieu-found-item-fingerprints triangle)
 )
 
@@ -70,24 +70,11 @@
 	(suspect roger)
 )
 
-(deffacts lunch
-	(lunch sandwich 10)
-	(lunch-smell sandwich cheese)
-	(lunch-smell sandwich ham)
-
-	(lunch cheese-fish 4)
-	(lunch-smell cheese-fish cheese)
-
-	(lunch nutelas 5)
-	(lunch-smell chocolate)
-)
-
 (deffacts fact
 	;;Country Canada
 	(country-of-crime canada)
 	(punitence-of-country canada deathPenalty)
 	(age-of-adult-of canada 18)
-
 	
 	;;Country Mexico
 	(punitence-of-country mexico none)
@@ -101,8 +88,6 @@
 	(has-weapon karl knife)
 	(has-fingerprint karl triangle)
 	(has-age-of karl 12)
-	(hairYouth karl 3040)
-
 
 	;;Sam
 	(like-to-eat sam fishes)
@@ -112,8 +97,6 @@
 	(has-weapon sam hammer)
 	(has-fingerprint sam circle)
 	(has-age-of sam 15)
-	(hairYouth sam 3040)
-
 
 	;;Bob killer
 	(like-to-eat bob nutelas)
@@ -123,8 +106,6 @@
 	(has-weapon bob knife)
 	(has-fingerprint bob triangle)
 	(has-age-of bob 21)
-	(hairYouth bob 2030)
-
 
 	;;Bob2 killer
 	(like-to-eat bob2 nutelas)
@@ -134,22 +115,16 @@
 	(has-weapon bob2 knife)
 	(has-fingerprint bob2 triangle)
 	(has-age-of bob2 21)
-	(hairYouth bob2 2030)
-
 
 	;;Roger
 	(like-to-eat roger fishes)
 	(has-weapon roger wrench)
 	(has-fingerprint roger triangle)
 	(has-age-of roger 30)
-	(hairYouth roger 1020)
-
 	
 	;;Nicolas
 	(has-weapon nicolas shovel)
 	(has-age-of nicolas 22)
-	(hairYouth karl 1020)
-
 
 )
 
@@ -207,21 +182,27 @@
     (wound-type puncture)
     (wound-type avulsion-fracture)
     (wound-type mouth-erosion)
-    (wound-type blue-skin)
-    (wound-type red-eye)
-    (wound-type skin-rash)
 )
 
 (deffacts weapon-types "Weapon type classified by wound type"
     (weapon-type slash laceration)
     (weapon-type pierce puncture)
     (weapon-type bullet puncture)
-    (weapon-type shell puncture)
     (weapon-type blunt avulsion-fracture)
 	(weapon-type poison mouth-erosion)
-    (weapon-type poison blue-skin)
-    (weapon-type poison red-eye)
-    (weapon-type poison skin-rash)
+)
+
+(deffacts temperature-affected-weapon-types
+    (temperature-phase-modification slash 1)
+    (temperature-phase-modification pierce 1)
+)
+
+(deffacts coagulation-affected-weapon-types
+    (coagulation-phase-modification bullet 1)
+)
+
+(deffacts skin-detoriation-affected-weapon-types
+	(skin-detoriation-phase-modification poison 1)
 )
 
 (deffacts weapons "Weapon classified by weapon type"
@@ -256,27 +237,6 @@
     (weapon-type drugs poison-seringue)
 	(weapon-type snakebite poison-seringue)
     (weapon-type SodiumThiopental poison-seringue)
-)
-
-(deffacts job "Weapon classified by jobs"
-    (job detergent garagist)
-    (job insecticide pestControl)
-    (job windwasher garagist)
-    (job gasoline garagist)
-    (job drugs doctor)
-	(job snakebite pestControl)
-    (job SodiumThiopental doctor)
-	(job hammer garagist)
-	(job sledgehammer garagist)
-	(job wrench garagist)
-	(job shovel garagist)
-	(job pistol policeOfficer)
-	(job shotgun policeOfficer)
-	(job knife policeOfficer)
-	(job blade policeOfficer)
-	(job machete pestControl)
-	(job screwdriver garagist)
-	(job nailgun garagist)
 )
 
 (batch "main.clp")
