@@ -13,245 +13,207 @@
 ;;; FACT OF CRIME SCENE
 ;;;======================================================
 
-(deffacts victim-wound "The wound types on the victim"
-	(victim-wound laceration)
-)
-
-(deffacts victim-phase
-  (victim-temperature-is-at-phase 3)
+(deffacts facts-crime-sceen
+	;victim
+	(victim-wound pure)
+	(victim-temperature-is-at-phase 3)
 	(victim-coagulation-is-at-phase 3)
 	(victim-skin-detoriation-is-at-phase 3)
+
+	;hair
+	(hair-lenght-on-crime short)
+	(hair-color-on-crime skin-3)
+	(hair-age-on-crime 30 to 60)
+
+	;smells
+	(place-smell-like health)
+
+	;place
+	(crime-location mid-lane)
+	(current-time-is 19)
+
+	;receipt
+	(receipt-on-crime 6000)
+
+	;footprint
+	(footprint-on-crime dire)
 )
-
-(deffacts fact-hair
-	(hair-lenght-on-crime long)
-	(hair-color-on-crime blond)
-	(hair-age-on-crime 20 to 30)
-)
-
-(deffacts fact-smell
-  (place-smell-like fishes)
-	(place-found-item nutelas)
-	(footprint-on-crime triangle)
-)
-
-(deffacts fact-receipt
-	(receipt-on-crime 50)
-)
-
-(deffacts crime-location
-	(crime-location park)
-)
-
-(deffacts current-investigation-time
-	(current-time-is 11)
-)
-
-(deffacts body-temperature-on-crime-scene
-	(body-temperature-is 10)
-)
-
-(deffacts lunch
-	(lunch sandwich 10)
-	(lunch-smell sandwich cheese)
-	(lunch-smell sandwich ham)
-
-	(lunch cheese-fish 4)
-	(lunch-smell cheese-fish cheese)
-
-	(lunch nutelas 5)
-	(lunch-smell chocolate)
-)
-
-; body temperature
-; Victim blood coagulation
-; Victim struggle + not-victim-blood -> Killer = wounded
-; Fake evidence on crime scene
-; Finger prints
-; Victim job -> Victim Tools/weapon
-
-
 
 
 ;;;======================================================
 ;;; FACT OF SUSPECT
 ;;;======================================================
 
-(deffacts suspect
-	(theTest bob)
-	(suspect bob)
-	(suspect karl)
-	(suspect sam)
-	(suspect bob2)
-	(suspect roger)
-)
+(deffacts facts-suspect
+	;Killer
+	(suspect Pudge)
+		(has-age-of Pudge 50)
+		(hair-lenght-of Pudge short)
+		(hair-color-of Pudge skin-1)
+		(hair-color-is-dyed Pudge)
+		(has-footprint Pudge dire)
+		(like-to-eat Pudge salve)
+		(was-at Pudge roshan from-t 12 to-t 13)
+		(travel Pudge by tp-scroll)
+		(travel Pudge by walking)
 
-(deffacts fact
-	;;Country Canada
-	(country-of-crime canada)
-	(punitence-of-country canada deathPenalty)
-	(age-of-adult-of canada 18)
-	
-	;;Country Mexico
-	(punitence-of-country mexico none)
-	(age-of-adult-of mexico 15)
+	(suspect Drow-Ranger)
+		(has-age-of Drow-Ranger 25)
+		(hair-lenght-of Drow-Ranger long)
+		(hair-color-of Drow-Ranger skin-2)
+		(hair-color-is-dyed Drow-Ranger)
+		(has-footprint Drow-Ranger dire)
+		(like-to-eat Drow-Ranger aegis)
+		(like-to-eat Drow-Ranger tango)
+		(was-at Drow-Ranger top-lane from-t 14 to-t 16)
+		(travel Drow-Ranger by tp-ult)
 
+	(suspect Huskar)
+		(has-age-of Huskar 41)
+		(hair-lenght-of Huskar short)
+		(hair-color-of Huskar skin-3)
+		(has-footprint Huskar radiant)
+		(like-to-eat Huskar cheese)
+		(like-to-eat Huskar tango)
+		(was-at Huskar bot-lane from-t 8 to-t 10)
+		(travel Huskar by tp-spell)
+		(travel Huskar by walking)
 
-	;;Karl
-	(like-to-eat karl nutelas)
-	(hair-lenght-of karl long)
-	(hair-color-of karl brown)
-	(has-weapon karl knife)
-	(has-footprint karl triangle)
-	(has-age-of karl 12)
-
-	;;Sam
-	(like-to-eat sam fishes)
-	(hair-lenght-of sam long)
-	(hair-color-of sam blond)
-	(hair-color-is-dyed sam)
-	(has-weapon sam hammer)
-	(has-footprint sam circle)
-	(has-age-of sam 15)
-
-	;;Bob killer
-	(like-to-eat bob nutelas)
-	(like-to-eat bob fishes)
-	(hair-lenght-of bob short)
-	(hair-color-of bob blond)
-	(has-weapon bob knife)
-	(has-footprint bob triangle)
-	(has-age-of bob 21)
-
-	;;Bob2 killer
-	(like-to-eat bob2 nutelas)
-	(like-to-eat bob2 fishes)
-	(hair-lenght-of bob2 short)
-	(hair-color-of bob2 blond)
-	(has-weapon bob2 knife)
-	(has-footprint bob2 triangle)
-	(has-age-of bob2 21)
-
-	;;Roger
-	(like-to-eat roger fishes)
-	(has-weapon roger wrench)
-	(has-footprint roger triangle)
-	(has-age-of roger 30)
-	
-	;;Nicolas
-	(has-weapon nicolas shovel)
-	(has-age-of nicolas 22)
-
-)
-
-(deffacts fact-dye-price
-	(dye-price-is blond 10)
-	(dye-price-is brown 15)
-	(dye-price-is black 20)
-)
-
-(deffacts fact-gas-price-by-liter
-	(one-liter-gas-price-is 13)
+	(suspect Invoker)
+		(has-age-of Invoker 32)
+		(hair-lenght-of Invoker short)
+		(hair-color-of Invoker skin-4)
+		(hair-color-is-dyed Invoker)
+		(has-footprint Invoker dire)
+		(like-to-eat Invoker mango)
+		(was-at Invoker ennemy-fountain from-t 14 to-t 16)
+		(travel Invoker by tp-scroll)
 )
 
 ;;;======================================================
-;;; Faits placex-temps - nick
+;;; FACT OF ARMS 
 ;;;======================================================
 
-(deffacts fact-place
-	(was-at karl park from-t 14 to-t 16)
-	(was-at bob park from-t 8 to-t 10)
-	(was-at bob cafe from-t 10 to-t 12)
-	(was-at john cafe from-t 10 to-t 14)
+(deffacts wound-types
+	(wound-type slash)
+	(wound-type bash)
+	(wound-type pierce)
+	(wound-type magical)
+	(wound-type pure)
 )
 
-(deffacts fact-distance
-	(distance-between park cafe is-t 100)
-)
-
-(deffacts fact-mobility
-  (travel-by carr 100 gas 13)
-	(travel-by bike 70 gas 4.5)
-)
-
-(deffacts fact-gas
-	(gas-price 2)
-)
-
-(deffacts fact-travel-by
-  (travel bob by carr)
-	(travel bob by bike)
-	(travel karl by carr)
-	(travel john by bike)
-)
-
-(deffacts fact-receipt
-	(receipt-on-crime 100)
-)
-
-;;;======================================================
-;;; FACT OF WEAPON
-;;;======================================================
-
-(deffacts wound-types "the wound types"
-  (wound-type laceration)
-	(wound-type puncture)
-	(wound-type avulsion-fracture)
-	(wound-type mouth-erosion)
-)
-
-(deffacts weapon-types "Weapon type classified by wound type"
-  (weapon-type slash laceration)
-	(weapon-type pierce puncture)
-	(weapon-type bullet puncture)
-	(weapon-type blunt avulsion-fracture)
-	(weapon-type poison mouth-erosion)
+(deffacts weapon-types
+  	(weapon-type blade slash)
+  	(weapon-type spear slash)
+  	(weapon-type spear pierce)
+	(weapon-type hammer bash)
+	(weapon-type staff bash)
+	(weapon-type wand magical)
+	(weapon-type book magical)
+	(weapon-type book pure)
+	(weapon-type curse pure)
+	(weapon-type holy pure)
 )
 
 (deffacts temperature-affected-weapon-types
-  (temperature-phase-modification laceration 1)
+  	(temperature-phase-modification curse 1)
+	(temperature-phase-modification holy -1)
 )
 
 (deffacts coagulation-affected-weapon-types
-  (coagulation-phase-modification puncture 1)
+  	(coagulation-phase-modification blade 1)
 )
 
 (deffacts skin-detoriation-affected-weapon-types
-  (skin-detoriation-phase-modification mouth-erosion 1)
+  	(skin-detoriation-phase-modification spear -1)
 )
 
-(deffacts weapons "Weapon classified by weapon type"
-  (weapon hammer blunt)
-	(weapon sledgehammer blunt)
-	(weapon wrench blunt)
-	(weapon shovel blunt)
-	(weapon pistol bullet)
-	(weapon shotgun shell)
-	(weapon knife slash)
-	(weapon blade slash)
-	(weapon machete slash)
-	(weapon screwdriver pierce)
-	(weapon icepick pierce)
-	(weapon nailgun pierce)
-	(weapon poison-vial poison)
-	(weapon poison-seringue poison)
+(deffacts weapons
+  	(weapon shadow-blade blade)
+	(weapon echo-saber blade)
+  	(weapon javelin spear)
+  	(weapon malestrom hammer)
+	(weapon monkey-king-bar staff)
+	(weapon quarter-staff staff)
+  	(weapon dagon wand)
+	(weapon necronomicon book)
+  	(weapon atos curse)
+	(weapon ghost-scepter curse)
+	(weapon divine-rapier holy)
 )
 
-(deffacts weapons-price
-	(weapon-price knife 50)
-	(weapon-price blade 150)
-	(weapon-price machete 180)
+(deffacts weapons
+	(weapon-price shadow-blade 2700)
+	(weapon-price echo-saber 2650)
+  	(weapon-price javelin 1550)
+  	(weapon-price malestrom 2800)
+	(weapon-price monkey-king-bar 5400)
+	(weapon-price quarter-staff 900)
+  	(weapon-price dagon 2720)
+	(weapon-price necronomicon 2650)
+  	(weapon-price atos 3100)
+	(weapon-price ghost-scepter 1550)
+	(weapon-price divine-rapier 6200)
 )
 
-; Doesn't make sense, I know
-(deffacts weapon-types "Poison type classified by container type"
-  (weapon-type detergent poison-vial)
-	(weapon-type insecticide poison-vial)
-	(weapon-type windwasher poison-vial)
-	(weapon-type gasoline poison-vial)
-	(weapon-type drugs poison-seringue)
-	(weapon-type snakebite poison-seringue)
-	(weapon-type SodiumThiopental poison-seringue)
+;;;======================================================
+;;; FACT OF PLACE 
+;;;======================================================
+
+(deffacts fact-distance
+  	(distance-between mid-lane roshan is-t 10000)
+	(distance-between mid-lane top-lane is-t 6000)
+	(distance-between mid-lane bot-lane is-t 5000)
+	(distance-between mid-lane ennemy-fountain is-t 2000)
+)
+
+;;;======================================================
+;;; FACT OF VEICHUL
+;;;======================================================
+
+(deffacts fact-mobility
+  	(travel-by tp-scroll 2000 gas 50)
+	(travel-by walking 500 gas 5)
+	(travel-by tp-spell 2000 gas 70)
+	(travel-by tp-ult 2000 gas 100)
+)
+
+(deffacts fact-gas
+  (gas-price 10)
+)
+
+;;;======================================================
+;;; FACT OF LUNCH
+;;;======================================================
+
+(deffacts lunch
+	(lunch aegis 1000)
+	(lunch-smell aegis health)
+	(lunch-smell aegis mana)
+
+	(lunch cheese 400)
+	(lunch-smell cheese health)
+	(lunch-smell cheese mana)
+
+	(lunch mango 110)
+	(lunch-smell mango mana)
+
+	(lunch tango 125)
+	(lunch-smell tango health)
+
+	(lunch salve 110)
+	(lunch-smell salve health)
+)
+
+;;;======================================================
+;;; FACT OF LUNCH
+;;;======================================================
+
+(deffacts fact-dye-price
+	(dye-price-is skin-1 250)
+	(dye-price-is skin-2 300)
+	(dye-price-is skin-3 500)
+	(dye-price-is skin-4 600)
 )
 
 (batch "main.clp")
