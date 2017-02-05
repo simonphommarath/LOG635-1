@@ -31,34 +31,68 @@
 ;;;======================================================
 ;;; Rule Lieux-temps
 ;;;======================================================
-
+/*
 (deffacts body-temperature-on-crime-scene
-	(body-temperature-is-at-phase 1 0 to 1)
+	(body-temperature-is-at-phase 1 1 to 1)
 	(body-temperature-is-at-phase 2 2 to 4)
 	(body-temperature-is-at-phase 3 5 to 7)
-	(body-temperature-is-at-phase 4 7 to 10)
-)
+	(body-temperature-is-at-phase 4 8 to 10)
+)*/
 
 (deffacts coagulation-on-crime-scene
-	(coagulation-is-at phase-1 0 to 2)
-	(coagulation-is-at phase-2 3 to 5)
-	(coagulation-is-at phase-3 6 to 8)
-	(coagulation-is-at phase-4 9 to 11)
+	(coagulation-is-at-phase 1 1 to 2)
+	(coagulation-is-at-phase 2 3 to 5)
+	(coagulation-is-at-phase 3 6 to 8)
+	(coagulation-is-at-phase 4 9 to 11)
 )
 
 (deffacts skin-detoriation-on-crime-scene
-	(skin-detoriation-is-at-phase 1 0 to 3)
+	(skin-detoriation-is-at-phase 1 1 to 3)
 	(skin-detoriation-is-at-phase 2 4 to 6)
 	(skin-detoriation-is-at-phase 3 7 to 9)
 )
 
-(defrule time-past-since-crime
+(defrule corpse-body-temperature
 	(declare (salience 0))
-	(body-temperature-is ?body-temperature)
-	(dead-body-temperature-is-at ?body-temperature degree-when-dead ?past-time hours-ago)
+	(corpse-body-temperature-is-at-phase ?temp)
 	=>
-	(assert (time-past-since-crime ?past-time))
-	(printout t "The crime was committed " ?past-time " hours ago" crlf)
+
+	(if (eq ?temp 1) then
+		(bind ?tmin 1)
+		(bind ?tmax 1)
+
+	else (if (eq ?temp 2) then
+		(bind ?tmin 2)
+		(bind ?tmax 4)
+
+	else (if (eq ?temp 3) then
+		(bind ?tmin 5)
+		(bind ?tmax 7)
+	else
+		(bind ?tmin 8)
+		(bind ?tmax 10)
+	)))
+	
+	(assert (body-temperature-is-at-phase ?temp ?tmin to ?tmax))
+	(printout t "body-temperature-is-at-phase " ?temp " " ?tmin " to " ?tmax crlf)
+)
+
+(defrule time-of-crime
+	(declare (salience 0))
+	(corpse-body-temperature-is-at-phase ?temp)
+	(corpse-coagulation-is-at-phase ?coag)
+	(corpse-skin-detoriation-is-at-phase ?skin)
+	
+	(skin-detoriation-is-at-phase ?skin ?min-skin to ?max-skin)
+	(coagulation-is-at-phase ?coag ?min-coag to ?max-coag)
+	(body-temperature-is-at-phase ?temp ?min-temp to ?max-temp)
+	=>
+	(printout t "XXXXXXXXXXXXXXXXX" crlf)
+	(bind ?tmin (min ?max-skin (min ?max-coag ?max-temp)))
+	(bind ?tmax (max ?min-skin (max ?min-coag ?min-temp)))
+	(assert (time-past-since-crime ?tmin))
+	(printout t "time min: " ?tmin " max: " ?tmax crlf)
+	(printout t "The crime was committed " ?tmin " hours ago" crlf)
 )
 
 (defrule corpse-time-location
@@ -292,6 +326,6 @@
 	;(halt) J'ai mis sa en commentaire pour voir le VRAI resultat finale (plus que 1 criminel possible actuellement) - Simon
 )
 
-(rules)
+;(rules)
 (reset)
 (run)

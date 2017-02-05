@@ -17,6 +17,12 @@
 	(victim-wound laceration)
 )
 
+(deffacts corpse-phase
+	(corpse-body-temperature-is-at-phase 4)
+	(corpse-coagulation-is-at-phase 3)
+	(corpse-skin-detoriation-is-at-phase 3)
+)
+
 (deffacts fact-hair-lenght
 	(hair-lenght-on-crime long)
 	(hair-color-on-crime blond)
